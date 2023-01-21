@@ -1,0 +1,27 @@
+| Rough makefile for building project with G++
+
+WimpSlot -min 20M
+
+Dir <Obey$Dir>
+
+echo Compiling source files...
+echo
+g++ -c -mlibscl -IOSLib: -o closewindowobserver.o closewindowobserver.cc
+g++ -c -mlibscl -IOSLib: -o iconbar.o iconbar.cc
+g++ -c -mlibscl -IOSLib: -o menu.o menu.cc
+g++ -c -mlibscl -IOSLib: -o menuselectionobserver.o menuselectionobserver.cc
+g++ -c -mlibscl -IOSLib: -o mouseclickobserver.o mouseclickobserver.cc
+g++ -c -mlibscl -IOSLib: -o observer.o observer.cc
+g++ -c -mlibscl -IOSLib: -o task.o task.cc
+g++ -c -mlibscl -IOSLib: -o window.o window.cc
+
+
+
+|echo Linking object files...
+|echo
+|g++ -mlibscl -o ../!RunImage closewindowobserver.o iconbar.o main.o menu.o menuselectionobserver.o mouseclickobserver.o observer.o task.o window.o  -LOSLib: -lOSLib32
+
+
+|echo Deleting object files...
+| Wipe flags -> ~C = Do not prompt for confirmation
+|Wipe o.* ~CFR~V
