@@ -23,6 +23,7 @@ namespace Wimp {
 
 
    class NullCommand : public CommandBase {
+   public:
       virtual ~NullCommand(void) {}
 
       virtual void Execute(void) const {}
