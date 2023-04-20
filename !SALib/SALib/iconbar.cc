@@ -1,7 +1,7 @@
 // Class for handling icons on the iconbar
 
 #include <cstring>
-#include "iconbar.h"
+#include "salib/iconbar.h"
 #include "oslib/wimp.h"
 
 

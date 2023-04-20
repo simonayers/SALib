@@ -1,6 +1,6 @@
 // Observer pattern for Wimp_Poll events
 
-#include "observer.h"
+#include "salib/observer.h"
 
 namespace SALib {
 

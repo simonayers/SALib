@@ -2,7 +2,7 @@
 
 #include <cstddef>
 #include "oslib/wimp.h"
-#include "menuselectionobserver.h"
+#include "salib/menuselectionobserver.h"
 
 namespace SALib {
 

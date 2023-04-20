@@ -5,7 +5,7 @@
 // task handle for now.
 
 #include "oslib/wimp.h"
-#include "task.h"
+#include "salib/task.h"
 
 namespace SALib {
 

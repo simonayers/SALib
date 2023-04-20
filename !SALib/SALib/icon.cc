@@ -1,6 +1,6 @@
 // Class for handling icons
 
-#include "icon.h"
+#include "salib/icon.h"
 #include "oslib/wimp.h"
 
 namespace SALib {
