@@ -1,4 +1,4 @@
-| Rough makefile for building project with G++
+| Rough makefile for building SALib library with G++
 
 WimpSlot -min 20M
 
@@ -6,22 +6,20 @@ Dir <Obey$Dir>
 
 echo Compiling source files...
 echo
-g++ -c -mlibscl -IOSLib: -o closewindowobserver.o closewindowobserver.cc
+g++ -c -mlibscl -IOSLib: -o windowobserver.o windowobserver.cc
 g++ -c -mlibscl -IOSLib: -o iconbar.o iconbar.cc
+g++ -c -mlibscl -IOSLib: -o iconbuilder.o iconbuilder.cc
 g++ -c -mlibscl -IOSLib: -o menu.o menu.cc
 g++ -c -mlibscl -IOSLib: -o menuselectionobserver.o menuselectionobserver.cc
 g++ -c -mlibscl -IOSLib: -o mouseclickobserver.o mouseclickobserver.cc
 g++ -c -mlibscl -IOSLib: -o observer.o observer.cc
 g++ -c -mlibscl -IOSLib: -o task.o task.cc
 g++ -c -mlibscl -IOSLib: -o window.o window.cc
+g++ -c -mlibscl -IOSLib: -o windowbuilder.o windowbuilder.cc
 
+echo Archiving object files into static library...
+echo
+ar rcs libSALib.a windowobserver.o iconbar.o iconbuilder.o menu.o menuselectionobserver.o mouseclickobserver.o observer.o task.o window.o windowbuilder.o
 
-
-|echo Linking object files...
-|echo
-|g++ -mlibscl -o ../!RunImage closewindowobserver.o iconbar.o main.o menu.o menuselectionobserver.o mouseclickobserver.o observer.o task.o window.o  -LOSLib: -lOSLib32
-
-
-|echo Deleting object files...
-| Wipe flags -> ~C = Do not prompt for confirmation
-|Wipe o.* ~CFR~V
+echo Deleting object files...
+Wipe o.* ~CFR~V
