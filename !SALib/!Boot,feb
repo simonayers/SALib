@@ -1,1 +1,2 @@
 Set SALib$Dir <Obey$Dir>
+Set SALib$Path <SALib$Dir>.SALib.
