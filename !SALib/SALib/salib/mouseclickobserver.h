@@ -3,6 +3,7 @@
 #ifndef MOUSE_CLICK_OBSERVER_H
 #define MOUSE_CLICK_OBSERVER_H
                      
+#include "command.h"
 #include "menu.h"
 #include "observer.h"
 #include "window.h"
@@ -27,12 +28,15 @@ private:
 
 class IconBarMouseClickObserver : public ObserverBase {
 public:
-   IconBarMouseClickObserver(Menu& iconBarMenu) : m_iconBarMenu(iconBarMenu) {}   // Make some set of command-pattern objects
+   IconBarMouseClickObserver(CommandBase& selectClickCommand, CommandBase& adjustClickCommand, Menu& iconBarMenu)
+      : m_selectClickCommand(selectClickCommand), m_adjustClickCommand(adjustClickCommand), m_iconBarMenu(iconBarMenu) {}   // Make some set of command-pattern objects
    virtual ~IconBarMouseClickObserver(void) {}
 
    virtual void Update(const unsigned* blockPtr) const;
 
 private:
+   CommandBase& m_selectClickCommand;
+   CommandBase& m_adjustClickCommand;
    Menu& m_iconBarMenu; 
 
    IconBarMouseClickObserver(const IconBarMouseClickObserver&);
