@@ -2,14 +2,14 @@
 
 #include <cstring>
 #include "oslib/wimp.h"
-#include "window.h"
+#include "salib/window.h"
 
 namespace SALib {
 
 namespace Wimp {
 
-Window::Window(const std::string windowTitle)
-      : m_windowTitle(windowTitle)
+Window::Window(const std::string windowTitle, const int width, const int height)
+      : m_windowTitle(windowTitle), m_windowWidth(width), m_windowHeight(height)
 {
    // Default window implementation
 
@@ -17,8 +17,8 @@ Window::Window(const std::string windowTitle)
 
    windowBlock.visible.x0 = 200;
    windowBlock.visible.y0 = 200;
-   windowBlock.visible.x1 = 600;
-   windowBlock.visible.y1 = 600;
+   windowBlock.visible.x1 = windowBlock.visible.x0 + m_windowWidth;
+   windowBlock.visible.y1 = windowBlock.visible.y0 + m_windowHeight;
 
    windowBlock.xscroll = 0;
    windowBlock.yscroll = 0;
@@ -79,33 +79,89 @@ Window::Window(const std::string windowTitle)
    m_handle = reinterpret_cast<unsigned>(wimp_create_window(&windowBlock));
 }
 
+
+Window::Window(const WindowBuilder builder)
+{
+
+
+}
+
+
 Window::~Window(void)
 {
    wimp_delete_window(reinterpret_cast<wimp_w>(m_handle));
    m_handle = 0;  // Don't really need to do this but what the hell!
 }
 
+static int GetScreenWidth(void)
+{
+   int width = -1;
+   int shift = -1;
+
+   // Prefer X-SWI but don't understand the additional parameter.
+   os_read_mode_variable(os_CURRENT_MODE, os_MODEVAR_XWIND_LIMIT, &width);
+   os_read_mode_variable(os_CURRENT_MODE, os_MODEVAR_XEIG_FACTOR, &shift);
+
+   return width << shift;
+}
+
+static int GetScreenHeight(void)
+{
+   int height = -1;
+   int shift = -1;
+
+   os_read_mode_variable(os_CURRENT_MODE, os_MODEVAR_YWIND_LIMIT, &height);
+   os_read_mode_variable(os_CURRENT_MODE, os_MODEVAR_YEIG_FACTOR, &shift);
+
+   return height << shift;
+}
+
 void Window::Open(void)
 {
-   wimp_open wimpOpenBlock;
+   int xPos = (GetScreenWidth() - m_windowWidth) / 2;
+   int yPos = (GetScreenHeight() - m_windowHeight) / 2;
+   OpenAt(xPos, yPos);
+}
 
-   wimpOpenBlock.w = reinterpret_cast<wimp_w>(m_handle);
-   wimpOpenBlock.visible.x0 = 1200;
-   wimpOpenBlock.visible.y0 = 1200;
-   wimpOpenBlock.visible.x1 = 1600;
-   wimpOpenBlock.visible.y1 = 1600;
+void Window::OpenAt(const int xPos, const int yPos)
+{
+   wimp_window_state windowState;
+   windowState.w = reinterpret_cast<wimp_w>(m_handle);
+   wimp_get_window_state(&windowState);
 
-   wimpOpenBlock.xscroll = 0;
-   wimpOpenBlock.yscroll = 0;
+   if (!(windowState.flags & wimp_WINDOW_OPEN)) {
+      windowState.visible.x0 = xPos;
+      windowState.visible.y0 = yPos;
+      windowState.visible.x1 = xPos + m_windowWidth;
+      windowState.visible.y1 = yPos + m_windowHeight;
 
-   wimpOpenBlock.next = wimp_TOP;
+      windowState.xscroll = 0;
+      windowState.yscroll = 0;
+   }
+   windowState.next = wimp_TOP;
 
-   wimp_open_window(&wimpOpenBlock);
+   wimp_open_window(reinterpret_cast<wimp_open*>(&windowState));
+}
+
+void Window::OpenRequest(const unsigned* blockPtr)
+{
+   wimp_open_window(reinterpret_cast<wimp_open*>(const_cast<unsigned*>(blockPtr)));
 }
 
 void Window::Close(void)
 {
+   OnClose();
    wimp_close_window(reinterpret_cast<wimp_w>(m_handle));
+}
+
+bool Window::IsWindowOpen(void) const
+{
+   wimp_window_state windowState;
+
+   windowState.w = reinterpret_cast<wimp_w>(m_handle);
+   wimp_get_window_state(&windowState);
+
+   return (windowState.flags & wimp_WINDOW_OPEN) > 0U ? true : false;
 }
 
 
