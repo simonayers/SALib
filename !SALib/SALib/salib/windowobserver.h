@@ -1,7 +1,7 @@
-// Class for handling Close Window Requests
+// Class for handling Window Requests
 
-#ifndef CLOSE_WINDOW_OBSERVER_H
-#define CLOSE_WINDOW_OBSERVER_H
+#ifndef WINDOWOBSERVER_H
+#define WINDOWOBSERVER_H
 
 #include "observer.h"
 #include "window.h"
@@ -9,6 +9,21 @@
 namespace SALib {
 
 namespace Wimp {
+
+class OpenWindowRequestObserver : public ObserverBase {
+public:
+   OpenWindowRequestObserver(Window& windowToOpen) : m_windowToOpen(windowToOpen) {}
+   virtual ~OpenWindowRequestObserver(void) {}
+
+   virtual void Update(const unsigned* blockPtr) const;
+
+private:
+   Window& m_windowToOpen;
+
+   OpenWindowRequestObserver(const OpenWindowRequestObserver&);
+   OpenWindowRequestObserver& operator=(const OpenWindowRequestObserver&);
+};
+
 
 class CloseWindowRequestObserver : public ObserverBase {
 public:
@@ -28,4 +43,4 @@ private:
 
 } // namespace SALib
 
-#endif // CLOSE_WINDOW_OBSERVER_H
+#endif // WINDOWOBSERVER_H

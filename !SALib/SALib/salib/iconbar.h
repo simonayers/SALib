@@ -24,7 +24,7 @@ namespace Wimp {
 
       IconBar(const IconPosition iconPosition, const std::string& spriteName);
       IconBar(const IconPosition iconPosition, const std::string& spriteName, const std::string& iconText);
-      ~IconBar(void);
+      ~IconBar(void);                                                                                      
 
    private:
       IconPosition m_iconPosition;
