@@ -14,8 +14,8 @@ namespace Wimp {
 class Window {
 public:
    Window(const std::string windowTitle, const int width, const int height);
-   Window(const WindowBuilder builder);
-   ~Window(void);
+   Window(const WindowBuilder& builder);
+   virtual ~Window(void);
 
    void Open(void);
    void OpenAt(const int xPos, const int yPos);

@@ -3,6 +3,11 @@
 #include <cstring>
 #include "oslib/wimp.h"
 #include "salib/window.h"
+                  
+// temp
+#include "salib/utilities.h"
+
+
 
 namespace SALib {
 
@@ -80,9 +85,63 @@ Window::Window(const std::string windowTitle, const int width, const int height)
 }
 
 
-Window::Window(const WindowBuilder builder)
+Window::Window(const WindowBuilder& builder)
+   : m_windowTitle(builder.GetWindowTitle()), m_windowWidth(builder.GetWindowVisibleWidth()),
+     m_windowHeight(builder.GetWindowVisibleHeight())
 {
+   // Default window implementation
 
+   wimp_window windowBlock;
+
+   windowBlock.visible.x0 = builder.GetWindowXScrollOffset();
+   windowBlock.visible.y0 = builder.GetWindowYScrollOffset();
+   windowBlock.visible.x1 = windowBlock.visible.x0 + builder.GetWindowVisibleWidth();
+   windowBlock.visible.y1 = windowBlock.visible.y0 + builder.GetWindowVisibleHeight();
+
+   windowBlock.xscroll = builder.GetWindowXScrollOffset();
+   windowBlock.yscroll = builder.GetWindowYScrollOffset();
+
+   const wimp_w TOP_OF_WINDOW_STACK = reinterpret_cast<wimp_w>(-1);
+   windowBlock.next = TOP_OF_WINDOW_STACK;
+
+   windowBlock.flags = static_cast<wimp_window_flags>(builder.GetWindowFlags());
+
+   windowBlock.title_fg = wimp_COLOUR_BLACK;
+   windowBlock.title_bg = wimp_COLOUR_LIGHT_GREY;
+
+   windowBlock.work_fg  = wimp_COLOUR_BLACK;
+   windowBlock.work_bg  = wimp_COLOUR_WHITE;
+
+   windowBlock.scroll_outer = wimp_COLOUR_MID_LIGHT_GREY;
+   windowBlock.scroll_inner = wimp_COLOUR_VERY_LIGHT_GREY;
+
+   windowBlock.highlight_bg = wimp_COLOUR_CREAM;
+
+   windowBlock.extra_flags = 0;
+
+   windowBlock.extent.x0 = 0;
+   windowBlock.extent.y0 = 0 - builder.GetWindowExtentHeight();
+   windowBlock.extent.x1 = builder.GetWindowExtentWidth();
+   windowBlock.extent.y1 = 0;
+
+   windowBlock.title_flags = wimp_ICON_TEXT
+                           | wimp_ICON_BORDER
+                           | wimp_ICON_HCENTRED
+                           | wimp_ICON_VCENTRED
+                           | wimp_ICON_FILLED;
+
+   windowBlock.work_flags = wimp_BUTTON_NEVER
+                         << wimp_ICON_BUTTON_TYPE_SHIFT;
+
+   windowBlock.sprite_area = reinterpret_cast<osspriteop_area*>(1);
+
+   windowBlock.xmin = 0;
+   windowBlock.ymin = 0;
+
+   std::strncpy(windowBlock.title_data.text, m_windowTitle.c_str(), 12);
+   windowBlock.icon_count = 0;
+
+   m_handle = reinterpret_cast<unsigned>(wimp_create_window(&windowBlock));
 
 }
 

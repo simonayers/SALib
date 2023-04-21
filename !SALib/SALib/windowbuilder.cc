@@ -24,6 +24,7 @@ unsigned WindowBuilder::WindowFlagsBuilder::GetFlags(void) const
    if (m_forceWindowToStayOnScreen)                      { flags |= wimp_WINDOW_BOUNDED; }
    if (m_ignoreRightExtentAdjustSizeIcon)                { flags |= wimp_WINDOW_IGNORE_XEXTENT; }
    if (m_ignoreBottomExtentWhenDraggingAdjustSizeIcon)   { flags |= wimp_WINDOW_IGNORE_YEXTENT; }
+   if (m_forceWindowToScreenOnNextOpenWindow)            { flags |= wimp_WINDOW_BOUNDED_ONCE; }
    if (m_hasBackIcon)                                    { flags |= wimp_WINDOW_BACK_ICON; }
    if (m_hasCloseIcon)                                   { flags |= wimp_WINDOW_CLOSE_ICON; }
    if (m_hasTitleBar)                                    { flags |= wimp_WINDOW_TITLE_ICON; }
