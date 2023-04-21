@@ -14,12 +14,13 @@ g++ -c -mlibscl -IOSLib: -o menuselectionobserver.o menuselectionobserver.cc
 g++ -c -mlibscl -IOSLib: -o mouseclickobserver.o mouseclickobserver.cc
 g++ -c -mlibscl -IOSLib: -o observer.o observer.cc
 g++ -c -mlibscl -IOSLib: -o task.o task.cc
+g++ -c -mlibscl -IOSLib: -o utilities.o utilities.cc
 g++ -c -mlibscl -IOSLib: -o window.o window.cc
 g++ -c -mlibscl -IOSLib: -o windowbuilder.o windowbuilder.cc
 
 echo Archiving object files into static library...
 echo
-ar rcs libSALib.a windowobserver.o iconbar.o iconbuilder.o menu.o menuselectionobserver.o mouseclickobserver.o observer.o task.o window.o windowbuilder.o
+ar rcs libSALib.a windowobserver.o iconbar.o iconbuilder.o menu.o menuselectionobserver.o mouseclickobserver.o observer.o task.o utilities.o window.o windowbuilder.o
 
 echo Deleting object files...
 Wipe o.* ~CFR~V
