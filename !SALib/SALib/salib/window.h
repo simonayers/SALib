@@ -13,8 +13,8 @@ namespace Wimp {
 
 class Window {
 public:
-   Window(const std::string windowTitle, const int width, const int height);
-   Window(const WindowBuilder& builder);
+   Window(const std::string windowTitle, const int width, const int height, const Window* parent = reinterpret_cast<Window*>(0));
+   Window(const WindowBuilder& builder, const Window* parent = reinterpret_cast<Window*>(0));
    virtual ~Window(void);
 
    void Open(void);
@@ -40,6 +40,8 @@ public:
 private:
    std::string m_windowTitle;
    unsigned m_handle;
+
+   const Window* m_parent;
 
    int m_windowWidth;
    int m_windowHeight;

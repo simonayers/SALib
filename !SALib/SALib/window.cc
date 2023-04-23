@@ -10,8 +10,8 @@ namespace SALib {
 
 namespace Wimp {
 
-Window::Window(const std::string windowTitle, const int width, const int height)
-      : m_windowTitle(windowTitle), m_windowWidth(width), m_windowHeight(height)
+Window::Window(const std::string windowTitle, const int width, const int height, const Window* parent)
+      : m_windowTitle(windowTitle), m_windowWidth(width), m_windowHeight(height), m_parent(parent)
 {
    // Default window implementation
 
@@ -82,9 +82,9 @@ Window::Window(const std::string windowTitle, const int width, const int height)
 }
 
 
-Window::Window(const WindowBuilder& builder)
+Window::Window(const WindowBuilder& builder, const Window* parent)
    : m_windowTitle(builder.GetWindowTitle()), m_windowWidth(builder.GetWindowVisibleWidth()),
-     m_windowHeight(builder.GetWindowVisibleHeight())
+     m_windowHeight(builder.GetWindowVisibleHeight()), m_parent(parent)
 {
    // Default window implementation
 
@@ -179,7 +179,9 @@ void Window::OpenAt(const int xPos, const int yPos)
 
    windowState.next = wimp_TOP;
 
-   wimp_open_window(reinterpret_cast<wimp_open*>(&windowState));
+   //wimp_open_window(reinterpret_cast<wimp_open*>(&windowState));
+   wimp_w parentWindow = m_parent ? reinterpret_cast<wimp_w>(m_parent->m_handle) : reinterpret_cast<wimp_w>(-1);
+   wimp_open_window_nested(reinterpret_cast<wimp_open*>(&windowState), parentWindow, wimp_CHILD_LINKS_PARENT_WORK_AREA);
 
    m_windowWidth  = windowState.visible.x1 - windowState.visible.x0;
    m_windowHeight = windowState.visible.y1 - windowState.visible.y0;
@@ -190,7 +192,9 @@ void Window::OpenAt(const int xPos, const int yPos)
 void Window::OpenRequest(const unsigned* blockPtr)
 {
    wimp_open* windowState = reinterpret_cast<wimp_open*>(const_cast<unsigned*>(blockPtr));
-   wimp_open_window(windowState);
+   //wimp_open_window(windowState);
+   wimp_w parentWindow = m_parent ? reinterpret_cast<wimp_w>(m_parent->m_handle) : reinterpret_cast<wimp_w>(-1);
+   wimp_open_window_nested(windowState, parentWindow, wimp_CHILD_LINKS_PARENT_WORK_AREA);
 
    m_windowWidth  = windowState->visible.x1 - windowState->visible.x0;
    m_windowHeight = windowState->visible.y1 - windowState->visible.y0;
