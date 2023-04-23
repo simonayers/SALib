@@ -41,8 +41,8 @@ void Task::ProcessMessages(void)
    // Temporary implementation of a message handling loop.
    // Later versions will pass messages on to registered event handlers.
    wimp_block block;
-   const wimp_event_no reason = wimp_poll(wimp_MASK_NULL    | wimp_MASK_ENTERING |
-                                          wimp_MASK_LEAVING | wimp_MASK_GAIN     |
+   const wimp_event_no reason = wimp_poll(wimp_MASK_NULL    | /*wimp_MASK_ENTERING |
+                                          wimp_MASK_LEAVING |*/ wimp_MASK_GAIN     |
                                           wimp_MASK_LOSE    | wimp_MASK_POLLWORD,
                                           &block, NULL);
    const unsigned* blockPtr = reinterpret_cast<unsigned*>(&block);

@@ -3,6 +3,7 @@
 #ifndef WINDOWOBSERVER_H
 #define WINDOWOBSERVER_H
 
+#include "command.h"
 #include "observer.h"
 #include "window.h"
 
@@ -37,6 +38,24 @@ private:
 
    CloseWindowRequestObserver(const CloseWindowRequestObserver&);
    CloseWindowRequestObserver& operator=(const CloseWindowRequestObserver&);
+};
+
+
+class PointerActionWindowObserver : public ObserverBase {
+public:
+   PointerActionWindowObserver(Window& window, CommandBase& actionCommand)
+      : m_window(window), m_actionCommand(actionCommand) {}
+
+   virtual ~PointerActionWindowObserver(void) {}
+
+   virtual void Update(const unsigned* blockPtr) const;
+
+private:
+   Window& m_window;
+   CommandBase& m_actionCommand;
+
+   PointerActionWindowObserver(const PointerActionWindowObserver&);
+   PointerActionWindowObserver& operator=(const PointerActionWindowObserver&);
 };
 
 } // namespace Wimp

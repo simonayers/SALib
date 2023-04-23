@@ -27,6 +27,16 @@ void SALib::Wimp::CloseWindowRequestObserver::Update(const unsigned* blockPtr) c
    }
 }
 
+
+void SALib::Wimp::PointerActionWindowObserver::Update(const unsigned* blockPtr) const
+{
+   const unsigned requestedWindowHandle = reinterpret_cast<unsigned>(*blockPtr);
+
+   if (m_window.IsMessageForMe(requestedWindowHandle)) {
+      m_actionCommand.Execute();
+   }
+}
+
 }
 
 }
