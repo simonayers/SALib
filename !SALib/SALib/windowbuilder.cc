@@ -37,6 +37,39 @@ unsigned WindowBuilder::WindowFlagsBuilder::GetFlags(void) const
    return flags;
 }
 
+static WindowBuilder::WindowFlagsBuilder DefaultWindowFlags(void)
+{
+
+}
+
+// Default values build a generic window
+WindowBuilder::WindowBuilder(void)
+   :  m_windowFlags(DefaultWindowFlags()),
+      m_windowTitle(""),
+
+      m_windowExtentWidth(400),
+      m_windowExtentHeight(400),
+
+      m_windowVisibleWidth(400),
+      m_windowVisibleHeight(400),
+
+      m_windowXScrollOffset(0),
+      m_windowYScrollOffset(0),
+
+      m_windowTitleForegroundColour(Colour::Black),
+      m_windowTitleBackgroundColour(Colour::LightGrey),
+
+      m_windowWorkAreaForegroundColour(Colour::Black),
+      m_windowWorkAreaBackgroundColour(Colour::White),
+
+      m_windowScrollOuterColour(Colour::MidLightGrey),
+      m_windowScrollInnerColour(Colour::VeryLightGrey),
+
+      m_windowHighlightBackgroundColour(Colour::Cream)
+{
+
+}
+
 
 }
 

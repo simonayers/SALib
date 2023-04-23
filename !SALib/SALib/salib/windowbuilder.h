@@ -4,6 +4,7 @@
 #define WINDOWBUILDER_H
 
 #include <string>
+#include "colour.h"
 
 namespace SALib {
 
@@ -86,6 +87,10 @@ public:
          bool m_newFormat;
       };
 
+
+   WindowBuilder(void);
+   ~WindowBuilder(void) {};
+
    void SetWindowFlags(const WindowFlagsBuilder& windowFlags) { m_windowFlags = windowFlags; }
    unsigned GetWindowFlags(void) const { return m_windowFlags.GetFlags(); }
 
@@ -112,6 +117,27 @@ public:
    void SetWindowYScrollOffset(const int windowYScrollOffset) { m_windowYScrollOffset = windowYScrollOffset; }
    int  GetWindowYScrollOffset(void) const { return m_windowYScrollOffset; }
 
+   void SetWindowTitleForegroundColour(const Colour::Colour colour) { m_windowTitleForegroundColour = colour; }
+   Colour::Colour GetWindowTitleForegroundColour(void) const { return m_windowTitleForegroundColour; }
+
+   void SetWindowTitleBackgroundColour(const Colour::Colour colour) { m_windowTitleBackgroundColour = colour; }
+   Colour::Colour GetWindowTitleBackgroundColour(void) const { return m_windowTitleBackgroundColour; }
+
+   void SetWindowWorkAreaForegroundColour(const Colour::Colour colour) { m_windowWorkAreaForegroundColour = colour; }
+   Colour::Colour GetWindowWorkAreaForegroundColour(void) const { return m_windowWorkAreaForegroundColour; }
+
+   void SetWindowWorkAreaBackgroundColour(const Colour::Colour colour) { m_windowWorkAreaBackgroundColour = colour; }
+   Colour::Colour GetWindowWorkBackForegroundColour(void) const { return m_windowWorkAreaBackgroundColour; }
+
+   void SetWindowScrollOuterColour(const Colour::Colour colour) { m_windowScrollOuterColour = colour; }
+   Colour::Colour GetWindowScrollOuterColour(void) const { return m_windowScrollOuterColour; }
+
+   void SetWindowScrollInnerColour(const Colour::Colour colour) { m_windowScrollInnerColour = colour; }
+   Colour::Colour GetWindowScrollInnerColour(void) const { return m_windowScrollInnerColour; }
+
+   void SetWindowHighlightBackgroundColour(const Colour::Colour colour) { m_windowHighlightBackgroundColour = colour; }
+   Colour::Colour GetWindowHighlightBackgroundColour(void) const { return m_windowHighlightBackgroundColour; }
+
 private:
    WindowFlagsBuilder m_windowFlags;
    std::string        m_windowTitle;
@@ -124,6 +150,17 @@ private:
 
    int m_windowXScrollOffset;
    int m_windowYScrollOffset;
+
+   Colour::Colour m_windowTitleForegroundColour;
+   Colour::Colour m_windowTitleBackgroundColour;
+
+   Colour::Colour m_windowWorkAreaForegroundColour;
+   Colour::Colour m_windowWorkAreaBackgroundColour;
+
+   Colour::Colour m_windowScrollOuterColour;
+   Colour::Colour m_windowScrollInnerColour;
+
+   Colour::Colour m_windowHighlightBackgroundColour;
 
 };
 

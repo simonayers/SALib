@@ -2,11 +2,8 @@
 
 #include <cstring>
 #include "oslib/wimp.h"
-#include "salib/window.h"
-                  
-// temp
 #include "salib/utilities.h"
-
+#include "salib/window.h"
 
 
 namespace SALib {
@@ -106,16 +103,16 @@ Window::Window(const WindowBuilder& builder)
 
    windowBlock.flags = static_cast<wimp_window_flags>(builder.GetWindowFlags());
 
-   windowBlock.title_fg = wimp_COLOUR_BLACK;
-   windowBlock.title_bg = wimp_COLOUR_LIGHT_GREY;
+   windowBlock.title_fg = static_cast<wimp_colour>(builder.GetWindowTitleForegroundColour());
+   windowBlock.title_bg = static_cast<wimp_colour>(builder.GetWindowTitleBackgroundColour());
 
-   windowBlock.work_fg  = wimp_COLOUR_BLACK;
-   windowBlock.work_bg  = wimp_COLOUR_WHITE;
+   windowBlock.work_fg  = static_cast<wimp_colour>(builder.GetWindowWorkAreaForegroundColour());
+   windowBlock.work_bg  = static_cast<wimp_colour>(builder.GetWindowWorkBackForegroundColour());
 
-   windowBlock.scroll_outer = wimp_COLOUR_MID_LIGHT_GREY;
-   windowBlock.scroll_inner = wimp_COLOUR_VERY_LIGHT_GREY;
+   windowBlock.scroll_outer = static_cast<wimp_colour>(builder.GetWindowScrollOuterColour());
+   windowBlock.scroll_inner = static_cast<wimp_colour>(builder.GetWindowScrollInnerColour());
 
-   windowBlock.highlight_bg = wimp_COLOUR_CREAM;
+   windowBlock.highlight_bg = static_cast<wimp_colour>(builder.GetWindowHighlightBackgroundColour());
 
    windowBlock.extra_flags = 0;
 
@@ -152,33 +149,10 @@ Window::~Window(void)
    m_handle = 0;  // Don't really need to do this but what the hell!
 }
 
-static int GetScreenWidth(void)
-{
-   int width = -1;
-   int shift = -1;
-
-   // Prefer X-SWI but don't understand the additional parameter.
-   os_read_mode_variable(os_CURRENT_MODE, os_MODEVAR_XWIND_LIMIT, &width);
-   os_read_mode_variable(os_CURRENT_MODE, os_MODEVAR_XEIG_FACTOR, &shift);
-
-   return width << shift;
-}
-
-static int GetScreenHeight(void)
-{
-   int height = -1;
-   int shift = -1;
-
-   os_read_mode_variable(os_CURRENT_MODE, os_MODEVAR_YWIND_LIMIT, &height);
-   os_read_mode_variable(os_CURRENT_MODE, os_MODEVAR_YEIG_FACTOR, &shift);
-
-   return height << shift;
-}
-
 void Window::Open(void)
 {
-   int xPos = (GetScreenWidth() - m_windowWidth) / 2;
-   int yPos = (GetScreenHeight() - m_windowHeight) / 2;
+   int xPos = (Utilities::GetScreenWidthOSUnits() - m_windowWidth) / 2;
+   int yPos = (Utilities::GetScreenHeightOSUnits() - m_windowHeight) / 2;
    OpenAt(xPos, yPos);
 }
 
@@ -196,21 +170,38 @@ void Window::OpenAt(const int xPos, const int yPos)
 
       windowState.xscroll = 0;
       windowState.yscroll = 0;
+   } else {
+      windowState.visible.x0 = xPos;
+      windowState.visible.y0 = yPos;
+      windowState.visible.x1 = xPos + m_windowWidth;
+      windowState.visible.y1 = yPos + m_windowHeight;
    }
+
    windowState.next = wimp_TOP;
 
    wimp_open_window(reinterpret_cast<wimp_open*>(&windowState));
+
+   m_windowWidth  = windowState.visible.x1 - windowState.visible.x0;
+   m_windowHeight = windowState.visible.y1 - windowState.visible.y0;
+
+   OnOpen();
 }
 
 void Window::OpenRequest(const unsigned* blockPtr)
 {
-   wimp_open_window(reinterpret_cast<wimp_open*>(const_cast<unsigned*>(blockPtr)));
+   wimp_open* windowState = reinterpret_cast<wimp_open*>(const_cast<unsigned*>(blockPtr));
+   wimp_open_window(windowState);
+
+   m_windowWidth  = windowState->visible.x1 - windowState->visible.x0;
+   m_windowHeight = windowState->visible.y1 - windowState->visible.y0;
+
+   OnOpen();
 }
 
 void Window::Close(void)
 {
-   OnClose();
    wimp_close_window(reinterpret_cast<wimp_w>(m_handle));
+   OnClose();
 }
 
 bool Window::IsWindowOpen(void) const
@@ -223,6 +214,35 @@ bool Window::IsWindowOpen(void) const
    return (windowState.flags & wimp_WINDOW_OPEN) > 0U ? true : false;
 }
 
+void Window::SetVisibleWidth(const int width)
+{
+   m_windowWidth = width;
+}
+
+void Window::SetVisibleHeight(const int height)
+{
+   m_windowHeight = height;
+}
+
+int Window::GetVisibleLeftEdge(void) const
+{
+   wimp_window_state windowState;
+
+   windowState.w = reinterpret_cast<wimp_w>(m_handle);
+   wimp_get_window_state(&windowState);
+
+   return windowState.visible.x0;
+}
+
+int Window::GetVisibleBottomEdge(void) const
+{
+   wimp_window_state windowState;
+
+   windowState.w = reinterpret_cast<wimp_w>(m_handle);
+   wimp_get_window_state(&windowState);
+
+   return windowState.visible.y0;
+}
 
 }
 

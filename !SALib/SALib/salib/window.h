@@ -22,6 +22,12 @@ public:
    void OpenRequest(const unsigned* blockPtr);
    void Close(void);
 
+   int GetVisibleLeftEdge(void) const;
+   int GetVisibleBottomEdge(void) const;
+
+   int GetVisibleWidth(void)  const { return m_windowWidth; }
+   int GetVisibleHeight(void) const { return m_windowHeight; }
+
    void SetVisibleWidth(const int width);
    void SetVisibleHeight(const int height);
 
