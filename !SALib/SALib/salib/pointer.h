@@ -1,7 +1,7 @@
 // Functions for Pointer manipulation
 
-#ifndef POINTER_H
-#define POINTER_H
+#ifndef SALIB_WIMP_POINTER_H
+#define SALIB_WIMP_POINTER_H
 
 namespace SALib {
 
@@ -21,4 +21,4 @@ void SetDefaultSprite(void);
 
 }
 
-#endif // POINTER_H
+#endif // SALIB_WIMP_POINTER_H
