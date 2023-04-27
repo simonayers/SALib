@@ -1,7 +1,7 @@
 // Class for Wimp colours
 
-#ifndef COLOURS_H
-#define COLOURS_H
+#ifndef SALIB_WIMP_COLOURS_H
+#define SALIB_WIMP_COLOURS_H
 
 namespace SALib {
 
@@ -35,10 +35,12 @@ enum Colour {
 
 };
 
-}
+void SetColour(const Colour colour);
 
 }
 
 }
 
-#endif // COLOURS_H
+}
+
+#endif // SALIB_WIMP_COLOURS_H
