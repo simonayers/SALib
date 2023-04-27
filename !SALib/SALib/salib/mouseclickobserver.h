@@ -5,6 +5,7 @@
                      
 #include "command.h"
 #include "menu.h"
+#include "mousecommand.h"
 #include "observer.h"
 #include "window.h"
 
@@ -14,13 +15,14 @@ namespace Wimp {
 
 class MouseClickObserver : public ObserverBase {
 public:
-   MouseClickObserver(Window& windowToOpen) : m_windowToOpen(windowToOpen) {}
+   MouseClickObserver(const Window& window, const MouseClickCommandBase& command) : m_window(window), m_command(command) {}
    virtual ~MouseClickObserver(void) {}
 
    virtual void Update(const unsigned* blockPtr) const;
 
 private:
-   Window& m_windowToOpen;
+   const Window& m_window;
+   const MouseClickCommandBase& m_command;
 
    MouseClickObserver(const MouseClickObserver&);
    MouseClickObserver& operator=(const MouseClickObserver&);

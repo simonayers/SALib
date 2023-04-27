@@ -1,6 +1,7 @@
 // Implementation of class handling Mouse Clicks
 
 #include "salib/mouseclickobserver.h"
+#include "salib/mousecommand.h"
 #include "oslib/os.h"
 #include "oslib/wimp.h"
 
@@ -10,7 +11,16 @@ namespace Wimp {
 
 void SALib::Wimp::MouseClickObserver::Update(const unsigned* blockPtr) const
 {
-   m_windowToOpen.Open();
+   const wimp_pointer* pointer = reinterpret_cast<const wimp_pointer*>(blockPtr);
+   const unsigned requestedWindowHandle = reinterpret_cast<unsigned>(pointer->w);
+
+   if (m_window.IsMessageForMe(requestedWindowHandle)) {
+      const int screenXPos = pointer->pos.x;
+      const int screenYPos = pointer->pos.y;
+      const int button     = static_cast<int>(pointer->buttons);
+      const int iconHandle = static_cast<int>(iconHandle);
+      m_command.ProcessClick(screenXPos, screenYPos, button, iconHandle);
+   }
 }
 
 void SALib::Wimp::IconBarMouseClickObserver::Update(const unsigned* blockPtr) const
