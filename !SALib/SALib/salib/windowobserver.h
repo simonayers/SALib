@@ -41,6 +41,21 @@ private:
 };
 
 
+class RedrawWindowRequestObserver : public ObserverBase {
+public:
+   RedrawWindowRequestObserver(Window& windowToRedraw) : m_windowToRedraw(windowToRedraw) {}
+   virtual ~RedrawWindowRequestObserver(void) {}
+
+   virtual void Update(const unsigned* blockPtr) const;
+
+private:
+   Window& m_windowToRedraw;
+
+   RedrawWindowRequestObserver(const RedrawWindowRequestObserver&);
+   RedrawWindowRequestObserver& operator=(const RedrawWindowRequestObserver&);
+};
+
+
 class PointerActionWindowObserver : public ObserverBase {
 public:
    PointerActionWindowObserver(Window& window, CommandBase& actionCommand)

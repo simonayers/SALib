@@ -1,6 +1,7 @@
 // Implementation of class to represent windows
 
 #include <cstring>
+#include <cstdio> // temp
 #include "oslib/wimp.h"
 #include "salib/utilities.h"
 #include "salib/window.h"
@@ -246,6 +247,51 @@ int Window::GetVisibleBottomEdge(void) const
    wimp_get_window_state(&windowState);
 
    return windowState.visible.y0;
+}
+
+void Window::RedrawRectangle(const Rectangle visibleArea, const int scrollXOffset, const int scrollYOffset, const Rectangle currentGraphicsWindow) const
+{
+    (void)visibleArea;
+    (void)scrollXOffset;
+    (void)scrollYOffset;
+    (void)currentGraphicsWindow;
+}
+
+void Window::ForceRedraw(void) const
+{
+   wimp_outline windowOutline;
+
+   windowOutline.w = reinterpret_cast<wimp_w>(m_handle);
+   wimp_get_window_outline(&windowOutline);
+
+   wimp_force_redraw(windowOutline.w, windowOutline.outline.x0, windowOutline.outline.y0, windowOutline.outline.x1, windowOutline.outline.y1);
+}
+
+void Window::UpdateWindow(void) const
+{
+   wimp_window_info windowInfo = { 0 };
+   windowInfo.w = reinterpret_cast<wimp_w>(m_handle);
+   wimp_get_window_info(&windowInfo);
+
+   wimp_draw wimpDraw = { 0 };
+   wimpDraw.w = reinterpret_cast<wimp_w>(m_handle);
+
+   wimpDraw.box.x0 = windowInfo.extent.x0;
+   wimpDraw.box.y0 = windowInfo.extent.y0;
+   wimpDraw.box.x1 = windowInfo.extent.x1;
+   wimpDraw.box.y1 = windowInfo.extent.y1;
+
+   osbool moreToDraw = wimp_update_window(&wimpDraw);
+
+   while (moreToDraw) {
+      const Rectangle visibleArea = *reinterpret_cast<Rectangle*>(&wimpDraw.box);
+      const int scrollXOffset = wimpDraw.xscroll;
+      const int scrollYOffset = wimpDraw.yscroll;
+      const Rectangle currentGraphicsWindow = *reinterpret_cast<Rectangle*>(&wimpDraw.clip);
+
+      RedrawRectangle(visibleArea, scrollXOffset, scrollYOffset, currentGraphicsWindow);
+      moreToDraw = wimp_get_rectangle(&wimpDraw);
+   }
 }
 
 }

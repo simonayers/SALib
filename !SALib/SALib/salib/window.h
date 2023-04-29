@@ -5,6 +5,8 @@
 
 #include <string>
 
+#include "colour.h"
+#include "rectangle.h"
 #include "windowbuilder.h"
 
 namespace SALib {
@@ -30,6 +32,13 @@ public:
 
    void SetVisibleWidth(const int width);
    void SetVisibleHeight(const int height);
+
+   Colour::Colour GetWindowBackgroundColour(void) const;
+   void SetWindowBackgroundColour(const Colour::Colour backgroundColour);
+
+   virtual void RedrawRectangle(const Rectangle visibleArea, const int scrollXOffset, const int scrollYOffset, const Rectangle currentGraphicsWindow) const;
+   void ForceRedraw(void) const;
+   void UpdateWindow(void) const;
 
    virtual void OnOpen(void) {}
    virtual void OnClose(void) {}
