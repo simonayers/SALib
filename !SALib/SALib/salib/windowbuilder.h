@@ -87,6 +87,21 @@ public:
          bool m_newFormat;
       };
 
+   enum WindowButtonType {
+      IgnoreAllClicks            =  0,
+      NotifyContinually          =  1,
+      ClickAutoRepeat            =  2,
+      ClickOnce                  =  3,
+      ReleaseOverWorkArea        =  4,
+      DoubleClick                =  5,
+      ClickOnceAndDrag           =  6,
+      ReleaseOverWorkAreaAndDrag =  7,
+      DoubleClickAndDrag         =  8,
+      ClickDragDoubleClick       = 10,
+      ClickAndDrag               = 11,
+      GainInputFocus             = 15
+   };
+
 
    WindowBuilder(void);
    ~WindowBuilder(void) {};
@@ -138,6 +153,9 @@ public:
    void SetWindowHighlightBackgroundColour(const Colour::Colour colour) { m_windowHighlightBackgroundColour = colour; }
    Colour::Colour GetWindowHighlightBackgroundColour(void) const { return m_windowHighlightBackgroundColour; }
 
+   void SetWindowButtonType(const WindowButtonType buttonType) { m_windowButtonType = buttonType; }
+   WindowButtonType GetWindowButtonType(void) const { return m_windowButtonType; }
+
 private:
    WindowFlagsBuilder m_windowFlags;
    std::string        m_windowTitle;
@@ -161,6 +179,8 @@ private:
    Colour::Colour m_windowScrollInnerColour;
 
    Colour::Colour m_windowHighlightBackgroundColour;
+
+   WindowButtonType m_windowButtonType;
 
 };
 

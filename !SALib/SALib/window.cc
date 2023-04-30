@@ -128,7 +128,7 @@ Window::Window(const WindowBuilder& builder, const Window* parent)
                            | wimp_ICON_VCENTRED
                            | wimp_ICON_FILLED;
 
-   windowBlock.work_flags = wimp_BUTTON_NEVER
+   windowBlock.work_flags = static_cast<wimp_icon_flags>(builder.GetWindowButtonType())
                          << wimp_ICON_BUTTON_TYPE_SHIFT;
 
    windowBlock.sprite_area = reinterpret_cast<osspriteop_area*>(1);

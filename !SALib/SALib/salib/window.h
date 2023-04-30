@@ -46,6 +46,8 @@ public:
    bool IsMessageForMe(const unsigned handle) const { return handle == m_handle; }
    bool IsWindowOpen(void) const;
 
+   unsigned GetWindowHandle(void) const { return m_handle; } // Do better if possible!
+
 private:
    std::string m_windowTitle;
    unsigned m_handle;

@@ -18,7 +18,7 @@ void SALib::Wimp::MouseClickObserver::Update(const unsigned* blockPtr) const
       const int screenXPos = pointer->pos.x;
       const int screenYPos = pointer->pos.y;
       const int button     = static_cast<int>(pointer->buttons);
-      const int iconHandle = static_cast<int>(iconHandle);
+      const int iconHandle = static_cast<int>(pointer->i);
       m_command.ProcessClick(screenXPos, screenYPos, button, iconHandle);
    }
 }

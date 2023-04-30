@@ -65,7 +65,9 @@ WindowBuilder::WindowBuilder(void)
       m_windowScrollOuterColour(Colour::MidLightGrey),
       m_windowScrollInnerColour(Colour::VeryLightGrey),
 
-      m_windowHighlightBackgroundColour(Colour::Cream)
+      m_windowHighlightBackgroundColour(Colour::Cream),
+
+      m_windowButtonType(IgnoreAllClicks)
 {
 
 }
