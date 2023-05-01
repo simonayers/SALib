@@ -15,6 +15,9 @@ void SetScrollLeftRight(void);
 void SetScrollUpDown(void);
 void SetDefaultSprite(void);
 
+int GetPointerXPosition(void);
+int GetPointerYPosition(void);
+
 }
 
 }
