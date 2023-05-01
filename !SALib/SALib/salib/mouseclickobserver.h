@@ -45,6 +45,20 @@ private:
    IconBarMouseClickObserver& operator=(const IconBarMouseClickObserver&);
 };
 
+class DraggingEndedObserver : public ObserverBase {
+public:
+   DraggingEndedObserver(const DraggingEndedCommandBase& command) :m_command(command) {}
+   virtual ~DraggingEndedObserver(void) {}
+
+   virtual void Update(const unsigned* blockPtr) const;
+
+private:
+   const DraggingEndedCommandBase& m_command;
+
+   DraggingEndedObserver(const DraggingEndedObserver&);
+   DraggingEndedObserver& operator=(const DraggingEndedObserver&);
+};
+
 } // namespace Wimp
 
 } // namespace SALib

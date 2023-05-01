@@ -54,6 +54,12 @@ void SALib::Wimp::IconBarMouseClickObserver::Update(const unsigned* blockPtr) co
    }
 }
 
+void SALib::Wimp::DraggingEndedObserver::Update(const unsigned* blockPtr) const
+{
+   const Rectangle dragBox = *reinterpret_cast<const Rectangle*>(blockPtr);
+   m_command.Process(dragBox);
+}
+
 }
 
 }
