@@ -24,17 +24,14 @@ public:
    void OpenRequest(const unsigned* blockPtr);
    void Close(void);
 
-   int GetVisibleLeftEdge(void) const;
-   int GetVisibleBottomEdge(void) const;
+   virtual int GetVisibleLeftEdge(void) const;
+   virtual int GetVisibleBottomEdge(void) const;
 
-   int GetVisibleWidth(void)  const { return m_windowWidth; }
-   int GetVisibleHeight(void) const { return m_windowHeight; }
+   virtual int GetVisibleWidth(void)  const { return m_windowWidth; }
+   virtual int GetVisibleHeight(void) const { return m_windowHeight; }
 
-   void SetVisibleWidth(const int width);
-   void SetVisibleHeight(const int height);
-
-   Colour::Colour GetWindowBackgroundColour(void) const;
-   void SetWindowBackgroundColour(const Colour::Colour backgroundColour);
+   virtual void SetVisibleWidth(const int width);
+   virtual void SetVisibleHeight(const int height);
 
    virtual void RedrawRectangle(const Rectangle visibleArea, const int scrollXOffset, const int scrollYOffset, const Rectangle currentGraphicsWindow) const;
    void ForceRedraw(void) const;
