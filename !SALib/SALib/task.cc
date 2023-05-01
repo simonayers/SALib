@@ -18,7 +18,7 @@ public:
 
 Task::Task(const char* const taskName, const Task::WimpVersionNumber wimpVersionNumber)
       : m_taskName(taskName), m_taskHandle(new TaskHandle),
-        m_requestToQuitReceived(false)
+        m_requestToQuitReceived(false), m_enableNullEvents(false)
 {
    wimp_message_list* wimpMessageList = reinterpret_cast<wimp_message_list*>(0);
    wimp_version_no    wimpVersionNumberReceived = static_cast<wimp_version_no>(0);
@@ -41,9 +41,10 @@ void Task::ProcessMessages(void)
    // Temporary implementation of a message handling loop.
    // Later versions will pass messages on to registered event handlers.
    wimp_block block;
-   const wimp_event_no reason = wimp_poll(wimp_MASK_NULL    | /*wimp_MASK_ENTERING |
-                                          wimp_MASK_LEAVING |*/ wimp_MASK_GAIN     |
-                                          wimp_MASK_LOSE    | wimp_MASK_POLLWORD,
+   const wimp_event_no reason = wimp_poll((m_enableNullEvents ? 0 : wimp_MASK_NULL)
+                                        | wimp_MASK_GAIN
+                                        | wimp_MASK_LOSE
+                                        | wimp_MASK_POLLWORD,
                                           &block, NULL);
    const unsigned* blockPtr = reinterpret_cast<unsigned*>(&block);
 

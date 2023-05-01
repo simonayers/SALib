@@ -25,6 +25,9 @@ namespace Wimp {
 
       void ProcessMessages(void);
 
+      void  EnableNullEvents(void) { m_enableNullEvents =  true; }
+      void DisableNullEvents(void) { m_enableNullEvents = false; }
+
    private:
       class TaskHandle;                // opaque class in header file
 
@@ -33,6 +36,7 @@ namespace Wimp {
 
       EventDispatcher m_eventDispatcher;
       bool m_requestToQuitReceived;
+      bool m_enableNullEvents;
 
       Task(const Task&);
       Task& operator=(const Task&);
