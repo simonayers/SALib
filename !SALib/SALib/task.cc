@@ -78,6 +78,8 @@ void Task::ProcessMessages(void)
          break;
 
       case wimp_USER_DRAG_BOX:
+         void SetNotCurrentlyDragging(void);  // Keep private to SALib
+         SetNotCurrentlyDragging();
          GetEventDispatcher().GetUserDragBoxHandlers().Notify(blockPtr);
          break;
 

@@ -15,6 +15,8 @@ void DragFixedSizeBox(const Window& window, const Rectangle initialDragbox, cons
 void DragUserPoint(const Window& window, const Rectangle boundingBox);
 void DragEnd(void);
 
+bool CurrentlyDragging(void);
+
 }
 
 }

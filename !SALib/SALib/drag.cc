@@ -2,10 +2,27 @@
 
 #include "oslib/wimp.h"
 #include "salib/drag.h"
+#include "salib/reporter.h"
 
 namespace SALib {
 
 namespace Wimp {
+
+static bool s_currentlyDraggingState = false;
+
+// Internal to SALib - not included in header file
+void SetCurrentlyDragging(void)
+{
+   SALib::Reporter::Report("SetCurrentlyDragging()");
+   s_currentlyDraggingState = true;
+}
+
+void SetNotCurrentlyDragging(void)
+{
+   SALib::Reporter::Report("SetNotCurrentlyDragging()");
+   s_currentlyDraggingState = false;
+}
+
 
 void DragWindowPosition(const Window& window, const Rectangle initialDragbox)
 {
@@ -20,6 +37,7 @@ void DragWindowPosition(const Window& window, const Rectangle initialDragbox)
    wimpDrag.initial.y1 = initialDragbox.yPos1;
 
    wimp_drag_box(&wimpDrag);
+   SetCurrentlyDragging();
 }
 
 void DragFixedSizeBox(const Window& window, const Rectangle initialDragbox, const Rectangle parentBox)
@@ -40,6 +58,7 @@ void DragFixedSizeBox(const Window& window, const Rectangle initialDragbox, cons
    wimpDrag.bbox.y1 = parentBox.yPos1;
 
    wimp_drag_box(&wimpDrag);
+   SetCurrentlyDragging();
 }
 
 void DragUserPoint(const Window& window, const Rectangle boundingBox)
@@ -61,12 +80,20 @@ void DragUserPoint(const Window& window, const Rectangle boundingBox)
    wimpDrag.bbox.y1 = boundingBox.yPos1;
 
    wimp_drag_box(&wimpDrag);
+   SetCurrentlyDragging();
 }
 
 void DragEnd(void)
 {
    wimp_drag wimpDrag = { 0 };
    wimp_drag_box(&wimpDrag);
+   SetNotCurrentlyDragging();
+}
+
+
+bool CurrentlyDragging(void)
+{
+   return s_currentlyDraggingState;
 }
 
 }
