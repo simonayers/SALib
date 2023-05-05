@@ -4,6 +4,8 @@
 #define ICON_H
 
 #include <string>
+#include "iconbuilder.h"
+#include "window.h"
 
 namespace SALib {
 
@@ -11,14 +13,19 @@ namespace Wimp {
 
    class Icon {
    public:
-      Icon(const std::string spriteName);
+      Icon(const IconBuilder& iconBuilder, const Window& window);
       virtual ~Icon(void);
 
 
    private:
-      unsigned m_iconNumber;
+      const Window& m_window;
+      const int m_iconHandle;
+
       std::string m_spriteName;
+      std::string m_text;
+      std::string m_validationString;
    };
+
 
 }
 

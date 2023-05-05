@@ -4,6 +4,7 @@
 #define ICONBUILDER_H
 
 #include <string>
+#include "rectangle.h"
 
 namespace SALib {
 
@@ -11,6 +12,24 @@ namespace Wimp {
 
 class IconFlagsBuilder {
 public:
+
+   enum IconButtonTypes {
+      IgnoreAllClicks                  =  0,
+      NotifyContinually                =  1,
+      ClickAutoRepeat                  =  2,
+      ClickOnce                        =  3,
+      ClickSelectsMoveAwayDeselects    =  4,
+      ClickSelectsNotifyDoubleClick    =  5,
+      ClickOnceAndDrag                 =  6,
+      ClickSelectsNotifyReleaseAndDrag =  7,
+      ClickSelectsDoubleClickAndDrag   =  8,
+      MenuIcon                         =  9,
+      ClickDragDoubleClick             = 10,
+      ClickSelectsAndDrag              = 11,
+      GainInputFocusAndDrag            = 14,
+      GainInputFocus                   = 15
+   };
+
     IconFlagsBuilder(void) :
        m_iconText(             false),
        m_iconSprite(           false),
@@ -32,20 +51,7 @@ public:
        m_iconFGColour(         false),
        m_iconBGColour(         false),
        m_iconFontHandle(       false),
-       m_buttonNever(          false),
-       m_buttonAlways(         false),
-       m_buttonRepeat(         false),
-       m_buttonClick(          false),
-       m_buttonRelease(        false),
-       m_buttonDoubleClick(    false),
-       m_buttonClickDrag(      false),
-       m_buttonReleaseDrag(    false),
-       m_buttonDoubleDrag(     false),
-       m_buttonMenuIcon(       false),
-       m_buttonDoubleClickDrag(false),
-       m_buttonRadio(          false),
-       m_buttonWriteClickDrag( false),
-       m_buttonWritable(       false)
+       m_buttonType(  IgnoreAllClicks)
        {}
 
    IconFlagsBuilder& SetIconText(             void) { m_iconText              = true; return *this; }
@@ -68,20 +74,8 @@ public:
    IconFlagsBuilder& SetIconFGColour(         void) { m_iconFGColour          = true; return *this; }
    IconFlagsBuilder& SetIconBGColour(         void) { m_iconBGColour          = true; return *this; }
    IconFlagsBuilder& SetIconFontHandle(       void) { m_iconFontHandle        = true; return *this; }
-   IconFlagsBuilder& SetButtonNever(          void) { m_buttonNever           = true; return *this; }
-   IconFlagsBuilder& SetButtonAlways(         void) { m_buttonAlways          = true; return *this; }
-   IconFlagsBuilder& SetButtonRepeat(         void) { m_buttonRepeat          = true; return *this; }
-   IconFlagsBuilder& SetButtonClick(          void) { m_buttonClick           = true; return *this; }
-   IconFlagsBuilder& SetButtonRelease(        void) { m_buttonRelease         = true; return *this; }
-   IconFlagsBuilder& SetButtonDoubleClick(    void) { m_buttonDoubleClick     = true; return *this; }
-   IconFlagsBuilder& SetButtonClickDrag(      void) { m_buttonClickDrag       = true; return *this; }
-   IconFlagsBuilder& SetButtonReleaseDrag(    void) { m_buttonReleaseDrag     = true; return *this; }
-   IconFlagsBuilder& SetButtonDoubleDrag(     void) { m_buttonDoubleDrag      = true; return *this; }
-   IconFlagsBuilder& SetButtonMenuIcon(       void) { m_buttonMenuIcon        = true; return *this; }
-   IconFlagsBuilder& SetButtonDoubleClickDrag(void) { m_buttonDoubleClickDrag = true; return *this; }
-   IconFlagsBuilder& SetButtonRadio(          void) { m_buttonRadio           = true; return *this; }
-   IconFlagsBuilder& SetButtonWriteClickDrag( void) { m_buttonWriteClickDrag  = true; return *this; }
-   IconFlagsBuilder& SetButtonWritable(       void) { m_buttonWritable        = true; return *this; }
+
+   IconFlagsBuilder& SetButtonType(const IconButtonTypes& buttonType) { m_buttonType = buttonType; return *this; }
 
    unsigned GetFlags(void) const;
 
@@ -106,35 +100,48 @@ private:
    bool m_iconBGColour;
    bool m_iconFGColour;
    bool m_iconFontHandle;
-   bool m_buttonNever;
-   bool m_buttonAlways;
-   bool m_buttonRepeat;
-   bool m_buttonClick;
-   bool m_buttonRelease;
-   bool m_buttonDoubleClick;
-   bool m_buttonClickDrag;
-   bool m_buttonReleaseDrag;
-   bool m_buttonDoubleDrag;
-   bool m_buttonMenuIcon;
-   bool m_buttonDoubleClickDrag;
-   bool m_buttonRadio;
-   bool m_buttonWriteClickDrag;
-   bool m_buttonWritable;
-
+   IconButtonTypes m_buttonType;
 };
 
 
 class IconDataBuilder {
 public:
+   IconDataBuilder(void) {}
    IconDataBuilder(const std::string& text) : m_text(text) {}
    IconDataBuilder(const std::string& text, const std::string& spriteName) : m_text(text), m_spriteName(spriteName) {}
 
    const std::string& GetText(void) const { return m_text; }
+   void SetText(const std::string& text) { m_text = text; }
+
    const std::string& GetSpriteName(void) const { return m_spriteName; }
+   void SetSpriteName(const std::string& spriteName) { m_spriteName = spriteName; }
 
 private:
    std::string m_text;
    std::string m_spriteName;
+};
+
+
+
+class IconBuilder {
+public:
+   IconBuilder(void) {}
+
+   void SetExtent(const Rectangle& extent) { m_extent = extent; }
+   const Rectangle& GetExtent(void) const { return m_extent; }
+
+   IconFlagsBuilder& GetIconFlagsBuilder(void) { return m_iconFlagsBuilder; }
+   IconDataBuilder& GetIconDataBuilder(void)   { return m_iconDataBuilder; }
+
+   const IconFlagsBuilder& GetIconFlagsBuilder(void) const { return m_iconFlagsBuilder; }
+   const IconDataBuilder& GetIconDataBuilder(  void) const { return m_iconDataBuilder; }
+
+   unsigned GetIconFlags(void) const { return m_iconFlagsBuilder.GetFlags(); }
+
+private:
+   Rectangle m_extent;
+   IconFlagsBuilder m_iconFlagsBuilder;
+   IconDataBuilder m_iconDataBuilder;
 };
 
 }

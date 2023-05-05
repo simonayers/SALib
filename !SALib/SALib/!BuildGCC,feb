@@ -9,6 +9,7 @@ echo
 g++ -c -mlibscl -IOSLib: -o colour.o colour.cc
 g++ -c -mlibscl -IOSLib: -o command.o command.cc
 g++ -c -mlibscl -IOSLib: -o drag.o drag.cc
+g++ -c -mlibscl -IOSLib: -o icon.o icon.cc
 g++ -c -mlibscl -IOSLib: -o iconbar.o iconbar.cc
 g++ -c -mlibscl -IOSLib: -o iconbuilder.o iconbuilder.cc
 g++ -c -mlibscl -IOSLib: -o menu.o menu.cc
@@ -26,7 +27,7 @@ g++ -c -mlibscl -IOSLib: -o windowobserver.o windowobserver.cc
 
 echo Archiving object files into static library...
 echo
-ar rcs libSALib.a colour.o command.o drag.o iconbar.o iconbuilder.o menu.o menuselectionobserver.o mouseclickobserver.o observer.o plot.o pointer.o reporter.o task.o utilities.o window.o windowbuilder.o windowobserver.o
+ar rcs libSALib.a colour.o command.o drag.o icon.o iconbar.o iconbuilder.o menu.o menuselectionobserver.o mouseclickobserver.o observer.o plot.o pointer.o reporter.o task.o utilities.o window.o windowbuilder.o windowobserver.o
 
 echo Deleting object files...
 Wipe o.* ~CFR~V
