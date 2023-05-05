@@ -4,6 +4,7 @@
 #define ICONBUILDER_H
 
 #include <string>
+#include "colour.h"
 #include "rectangle.h"
 
 namespace SALib {
@@ -31,27 +32,27 @@ public:
    };
 
     IconFlagsBuilder(void) :
-       m_iconText(             false),
-       m_iconSprite(           false),
-       m_iconBorder(           false),
-       m_iconHCentred(         false),
-       m_iconVCentred(         false),
-       m_iconFilled(           false),
-       m_iconAntiAliased(      false),
-       m_iconNeedsHelp(        false),
-       m_iconIndirected(       false),
-       m_iconRJustified(       false),
-       m_iconAllowAdjust(      false),
-       m_iconHalfSize(         false),
-       m_iconButtonType(       false),
-       m_iconESG(              false),
-       m_iconSelected(         false),
-       m_iconShaded(           false),
-       m_iconDeleted(          false),
-       m_iconFGColour(         false),
-       m_iconBGColour(         false),
-       m_iconFontHandle(       false),
-       m_buttonType(  IgnoreAllClicks)
+       m_iconText(            false),
+       m_iconSprite(          false),
+       m_iconBorder(          false),
+       m_iconHCentred(        false),
+       m_iconVCentred(        false),
+       m_iconFilled(          false),
+       m_iconAntiAliased(     false),
+       m_iconNeedsHelp(       false),
+       m_iconIndirected(      false),
+       m_iconRJustified(      false),
+       m_iconAllowAdjust(     false),
+       m_iconHalfSize(        false),
+       m_iconButtonType(      false),
+       m_iconESG(             false),
+       m_iconSelected(        false),
+       m_iconShaded(          false),
+       m_iconDeleted(         false),
+       m_iconFGColour(Colour::Black),
+       m_iconBGColour(Colour::White),
+       m_iconFontHandle(      false),
+       m_buttonType(IgnoreAllClicks)
        {}
 
    IconFlagsBuilder& SetIconText(             void) { m_iconText              = true; return *this; }
@@ -71,8 +72,10 @@ public:
    IconFlagsBuilder& SetIconSelected(         void) { m_iconSelected          = true; return *this; }
    IconFlagsBuilder& SetIconShaded(           void) { m_iconShaded            = true; return *this; }
    IconFlagsBuilder& SetIconDeleted(          void) { m_iconDeleted           = true; return *this; }
-   IconFlagsBuilder& SetIconFGColour(         void) { m_iconFGColour          = true; return *this; }
-   IconFlagsBuilder& SetIconBGColour(         void) { m_iconBGColour          = true; return *this; }
+
+   IconFlagsBuilder& SetIconFGColour(Colour::Colour iconFGColour) { m_iconFGColour = iconFGColour; return *this; }
+   IconFlagsBuilder& SetIconBGColour(Colour::Colour iconBGColour) { m_iconBGColour = iconBGColour; return *this; }
+
    IconFlagsBuilder& SetIconFontHandle(       void) { m_iconFontHandle        = true; return *this; }
 
    IconFlagsBuilder& SetButtonType(const IconButtonTypes& buttonType) { m_buttonType = buttonType; return *this; }
@@ -97,9 +100,9 @@ private:
    bool m_iconSelected;
    bool m_iconShaded;
    bool m_iconDeleted;
-   bool m_iconBGColour;
-   bool m_iconFGColour;
-   bool m_iconFontHandle;
+   Wimp::Colour::Colour m_iconFGColour;
+   Wimp::Colour::Colour m_iconBGColour;
+   unsigned char m_iconFontHandle;
    IconButtonTypes m_buttonType;
 };
 
