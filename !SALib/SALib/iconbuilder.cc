@@ -31,20 +31,6 @@ unsigned IconFlagsBuilder::GetFlags(void) const
    if (m_iconFGColour)          { flags |= wimp_ICON_FG_COLOUR; }
    if (m_iconBGColour)          { flags |= wimp_ICON_BG_COLOUR; }
    if (m_iconFontHandle)        { flags |= wimp_ICON_FONT_HANDLE; }
-//   if (m_buttonNever)           { flags |= wimp_BUTTON_NEVER; }
-//   if (m_buttonAlways)          { flags |= wimp_BUTTON_ALWAYS; }
-//   if (m_buttonRepeat)          { flags |= wimp_BUTTON_REPEAT; }
-//   if (m_buttonClick)           { flags |= wimp_BUTTON_CLICK; }
-//   if (m_buttonRelease)         { flags |= wimp_BUTTON_RELEASE; }
-//   if (m_buttonDoubleClick)     { flags |= wimp_BUTTON_DOUBLE_CLICK; }
-//   if (m_buttonClickDrag)       { flags |= wimp_BUTTON_CLICK_DRAG; }
-//   if (m_buttonReleaseDrag)     { flags |= wimp_BUTTON_RELEASE_DRAG; }
-//   if (m_buttonDoubleDrag)      { flags |= wimp_BUTTON_DOUBLE_DRAG; }
-//   if (m_buttonMenuIcon)        { flags |= wimp_BUTTON_MENU_ICON; }
-//   if (m_buttonDoubleClickDrag) { flags |= wimp_BUTTON_DOUBLE_CLICK_DRAG; }
-//   if (m_buttonRadio)           { flags |= wimp_BUTTON_RADIO; }
-//   if (m_buttonWriteClickDrag)  { flags |= wimp_BUTTON_WRITE_CLICK_DRAG; }
-//   if (m_buttonWritable)        { flags |= wimp_BUTTON_WRITABLE; }
 
    return flags;
 }
