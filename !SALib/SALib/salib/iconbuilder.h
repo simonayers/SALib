@@ -5,6 +5,7 @@
 
 #include <string>
 #include "colour.h"
+#include "font.h"
 #include "rectangle.h"
 
 namespace SALib {
@@ -51,7 +52,7 @@ public:
        m_iconDeleted(         false),
        m_iconFGColour(Colour::Black),
        m_iconBGColour(Colour::White),
-       m_iconFontHandle(      false),
+       m_iconFont(NULL),
        m_buttonType(IgnoreAllClicks)
        {}
 
@@ -76,11 +77,14 @@ public:
    IconFlagsBuilder& SetIconFGColour(Colour::Colour iconFGColour) { m_iconFGColour = iconFGColour; return *this; }
    IconFlagsBuilder& SetIconBGColour(Colour::Colour iconBGColour) { m_iconBGColour = iconBGColour; return *this; }
 
-   IconFlagsBuilder& SetIconFontHandle(       void) { m_iconFontHandle        = true; return *this; }
+   IconFlagsBuilder& SetIconFont(const OS::Font& font) { m_iconFont = &font; return *this; }
 
    IconFlagsBuilder& SetButtonType(const IconButtonTypes& buttonType) { m_buttonType = buttonType; return *this; }
 
    unsigned GetFlags(void) const;
+   bool GetAntiAliased(void) const { return m_iconAntiAliased; }
+   Colour::Colour GetIconFGColour(void) const { return m_iconFGColour; }
+   Colour::Colour GetIconBGColour(void) const { return m_iconBGColour; }
 
 private:
    bool m_iconText;
@@ -102,7 +106,7 @@ private:
    bool m_iconDeleted;
    Wimp::Colour::Colour m_iconFGColour;
    Wimp::Colour::Colour m_iconBGColour;
-   unsigned char m_iconFontHandle;
+   const OS::Font* m_iconFont;
    IconButtonTypes m_buttonType;
 };
 

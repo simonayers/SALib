@@ -1,6 +1,7 @@
 // Classes for building Icon definitions
 
 #include "oslib/wimp.h"
+#include "salib/font.h"
 #include "salib/iconbuilder.h"
 
 namespace SALib {
@@ -19,11 +20,15 @@ unsigned IconFlagsBuilder::GetFlags(void) const
    if (m_iconFilled)            { flags |= wimp_ICON_FILLED; }
 
    if (m_iconAntiAliased) {
-      flags |= wimp_ICON_ANTI_ALIASED;
+      if (m_iconFont) {
+         if (m_iconFont->IsLoaded()) {
+            flags |= static_cast<unsigned>(m_iconFont->GetHandle()) << wimp_ICON_FONT_HANDLE_SHIFT;
+            flags |= wimp_ICON_ANTI_ALIASED;
+         }
+      } 
+   } else {
       flags |= m_iconFGColour << wimp_ICON_FG_COLOUR_SHIFT;
       flags |= m_iconBGColour << wimp_ICON_BG_COLOUR_SHIFT;
-   } else {
-
    }
 
    if (m_iconNeedsHelp)         { flags |= wimp_ICON_NEEDS_HELP; }
@@ -36,7 +41,6 @@ unsigned IconFlagsBuilder::GetFlags(void) const
    if (m_iconSelected)          { flags |= wimp_ICON_SELECTED; }
    if (m_iconShaded)            { flags |= wimp_ICON_SHADED; }
    if (m_iconDeleted)           { flags |= wimp_ICON_DELETED; }
-   if (m_iconFontHandle)        { flags |= wimp_ICON_FONT_HANDLE; }
 
    return flags;
 }

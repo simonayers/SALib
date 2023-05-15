@@ -1,5 +1,6 @@
 // Class for handling icons
-
+                  
+#include <cstdio>
 #include <cstring>
 #include "oslib/wimp.h"
 #include "salib/icon.h"
@@ -39,9 +40,19 @@ Icon::Icon(const IconBuilder& iconBuilder, const Window& window)
    } else if (m_text.size() > 0) {   // Icon is text only
       iconBlock.icon.flags |= wimp_ICON_INDIRECTED;  // Force using indirected text
 
+      if (iconBuilder.GetIconFlagsBuilder().GetAntiAliased()) {
+         char tempValidationString[50] = {'\0'};
+
+         snprintf(tempValidationString, sizeof(tempValidationString), "F%x%x",
+                  iconBuilder.GetIconFlagsBuilder().GetIconBGColour() & 0xF,
+                  iconBuilder.GetIconFlagsBuilder().GetIconFGColour() & 0xF);
+
+         m_validationString = tempValidationString;
+      }
+
       iconBlock.icon.data.indirected_text.text = reinterpret_cast<char*>(&m_text[0]);
       iconBlock.icon.data.indirected_text.size = m_text.size() + 1;
-      iconBlock.icon.data.indirected_text.validation = const_cast<char*>("");
+      iconBlock.icon.data.indirected_text.validation = reinterpret_cast<char*>(&m_validationString[0]);
    }
 
    *const_cast<int*>(reinterpret_cast<const int*>(&m_iconHandle)) = wimp_create_icon(&iconBlock);
