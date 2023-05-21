@@ -13,7 +13,7 @@ namespace SALib {
 
 namespace Wimp {
 
-Icon::Icon(const IconBuilder& iconBuilder, const Window& window)
+Icon::Icon(const IconBuilder& iconBuilder, const Window& window, const unsigned maxTextSize)
    : m_window(window),
      m_iconHandle(0),
      m_spriteName(iconBuilder.GetIconDataBuilder().GetSpriteName()),
@@ -38,6 +38,8 @@ Icon::Icon(const IconBuilder& iconBuilder, const Window& window)
          // Indirect
       }
    } else if (m_text.size() > 0) {   // Icon is text only
+      m_text.reserve(maxTextSize);
+
       iconBlock.icon.flags |= wimp_ICON_INDIRECTED;  // Force using indirected text
 
       if (iconBuilder.GetIconFlagsBuilder().GetAntiAliased()) {
@@ -61,6 +63,12 @@ Icon::Icon(const IconBuilder& iconBuilder, const Window& window)
 Icon::~Icon(void)
 {
    wimp_delete_icon(reinterpret_cast<wimp_w>(m_window.GetWindowHandle()), static_cast<wimp_i>(m_iconHandle)); 
+}
+
+void Icon::Redraw(void) const
+{
+   wimp_set_icon_state(reinterpret_cast<wimp_w>(m_window.GetWindowHandle()), static_cast<wimp_i>(m_iconHandle),
+                       static_cast<wimp_icon_flags>(0), static_cast<wimp_icon_flags>(0));
 }
 
 }
