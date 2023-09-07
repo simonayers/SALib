@@ -17,6 +17,8 @@ int GetScreenWidthOSUnits(void);
 void ErrorMessageBox(const char* message);
 std::string UnsignedToBinaryString(const unsigned value);
 
+bool ModuleExistsInMemory(const char * const moduleName);
+
 }
 
 }

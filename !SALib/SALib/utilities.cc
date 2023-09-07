@@ -3,6 +3,7 @@
 #include <cstring>
 
 #include "oslib/os.h"
+#include "oslib/osmodule.h"
 #include "oslib/wimp.h"
 #include "oslib/wimpspriteop.h"
 #include "salib/utilities.h"
@@ -70,6 +71,20 @@ std::string UnsignedToBinaryString(const unsigned value)
    return binaryString;
 }
 
+bool ModuleExistsInMemory(const char * const moduleName)
+{
+   int moduleNumber     = 0;
+   int instanceNumber   = 0;
+
+   byte * moduleBase    = NULL;
+   void * privateWord   = NULL;
+   char * postfixString = NULL;
+
+   os_error * error = xosmodule_lookup(moduleName, &moduleNumber, &instanceNumber, &moduleBase,
+                                       &privateWord, &postfixString);
+
+   return error ? false : true;
+}
 
 }
 
