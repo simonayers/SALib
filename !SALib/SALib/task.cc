@@ -20,7 +20,10 @@ Task::Task(const char* const taskName, const Task::WimpVersionNumber wimpVersion
       : m_taskName(taskName), m_taskHandle(new TaskHandle),
         m_requestToQuitReceived(false), m_enableNullEvents(false)
 {
-   wimp_message_list* wimpMessageList = reinterpret_cast<wimp_message_list*>(0);
+//   wimp_message_list* wimpMessageList = reinterpret_cast<wimp_message_list*>(0);
+   int messageList[4] = { message_DATA_LOAD, message_DATA_OPEN, message_ICONISE, 0 };
+   wimp_message_list* wimpMessageList = reinterpret_cast<wimp_message_list*>(&messageList[0]);
+ 
    wimp_version_no    wimpVersionNumberReceived = static_cast<wimp_version_no>(0);
 
    m_taskHandle->handle = wimp_initialise(static_cast<wimp_version_no>(wimpVersionNumber),
@@ -110,14 +113,14 @@ void Task::ProcessMessages(void)
       case wimp_USER_MESSAGE:
          GetEventDispatcher().GetUserMessageHandlers().Notify(blockPtr);
          if (block.message.action == message_QUIT) {
-            m_requestToQuitReceived = true;
+            RequestToQuit();
          }
          break;
 
       case wimp_USER_MESSAGE_RECORDED:
          GetEventDispatcher().GetUserMessageRecordedHandlers().Notify(blockPtr);
          if (block.message.action == message_QUIT) {
-            m_requestToQuitReceived = true;
+            RequestToQuit();
          }
          break;
 

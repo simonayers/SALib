@@ -20,7 +20,10 @@ namespace Wimp {
       Task(const char* const taskName, const WimpVersionNumber wimpVersionNumber = WIMP_VERSION_380);
       ~Task(void);
 
+      void RequestToQuit(void) { m_requestToQuitReceived = true; }
+      void CancelRequestToQuit(void) { m_requestToQuitReceived = false; }
       bool RequestToQuitReceived(void) const { return m_requestToQuitReceived; }
+
       EventDispatcher& GetEventDispatcher(void) { return m_eventDispatcher; }
 
       void ProcessMessages(void);
