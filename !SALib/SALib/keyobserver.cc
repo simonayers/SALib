@@ -1,5 +1,5 @@
-// Implementation of class handling Mouse Clicks
-                             
+// Implementation of class handling Key Presses
+        
 #include "oslib/wimp.h"
 #include "salib/keyobserver.h"
 #include "salib/keycommand.h"
@@ -11,7 +11,7 @@ namespace Wimp {
 
 void KeyPressObserver::Update(const unsigned* blockPtr) const
 {
-   SALib::Reporter::Report("Key pressed");
+   SALib::Reporter::Report("KeyPressObserver::Update()");
 
    const wimp_key* keyBlock = reinterpret_cast<const wimp_key*>(blockPtr);
    const unsigned requestedWindowHandle = reinterpret_cast<unsigned>(keyBlock->w);
