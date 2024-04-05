@@ -1,7 +1,7 @@
 // Class for handling icons on the iconbar
 
-#ifndef ICONBAR_H
-#define ICONBAR_H
+#ifndef SALIB_WIMP_ICONBAR_H
+#define SALIB_WIMP_ICONBAR_H
 
 #include <string>
 
@@ -39,5 +39,5 @@ namespace Wimp {
 }
 
 
-#endif
+#endif // SALIB_WIMP_ICONBAR_H
 
