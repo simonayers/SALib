@@ -35,7 +35,33 @@ enum Colour {
 
 };
 
+class RGBColour {
+public:
+   RGBColour(const unsigned char red, const unsigned char green, const unsigned char blue, const unsigned char alpha)
+      : m_red(red), m_green(green), m_blue(blue), m_alpha(alpha) {}
+
+   unsigned char Red(  void) const { return m_red;   }
+   unsigned char Green(void) const { return m_green; }
+   unsigned char Blue( void) const { return m_blue;  }
+   unsigned char Alpha(void) const { return m_alpha; }
+
+   unsigned GetBGRAValue(void) const {
+      return (static_cast<unsigned>(m_red  ) <<  8) +
+             (static_cast<unsigned>(m_green) << 12) +
+             (static_cast<unsigned>(m_blue ) << 24) +
+              static_cast<unsigned>(m_alpha);
+   }
+
+private:
+   const unsigned char m_red;
+   const unsigned char m_green;
+   const unsigned char m_blue;
+   const unsigned char m_alpha;
+};
+
 void SetColour(const Colour colour);
+
+RGBColour WimpColourToRGBColour(const Colour colour);
 
 }
 
