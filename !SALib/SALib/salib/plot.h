@@ -10,6 +10,7 @@ namespace SALib {
 namespace OS {
  
 void PlotRectangle(const SALib::Wimp::Rectangle rectangle);
+void PlotRectangleAbsolute(const SALib::Wimp::Rectangle rectangle);
 
 }
 

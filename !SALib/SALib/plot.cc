@@ -13,6 +13,12 @@ void PlotRectangle(const SALib::Wimp::Rectangle rectangle)
    os_plot(os_PLOT_RECTANGLE + 1, rectangle.xPos1, rectangle.yPos1);
 }
 
+void PlotRectangleAbsolute(const SALib::Wimp::Rectangle rectangle)
+{
+   os_plot(os_MOVE_TO, rectangle.xPos0, rectangle.yPos0);
+   os_plot(os_PLOT_RECTANGLE + 5, rectangle.xPos1, rectangle.yPos1);
+}
+
 }
 
 }
