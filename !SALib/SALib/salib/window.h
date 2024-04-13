@@ -33,12 +33,18 @@ public:
    virtual void SetVisibleWidth(const int width);
    virtual void SetVisibleHeight(const int height);
 
+   virtual void SetExtentWidth(const int width);
+   virtual void SetExtentHeight(const int height);
+
    virtual void RedrawRectangle(const Rectangle visibleArea, const int scrollXOffset, const int scrollYOffset, const Rectangle currentGraphicsWindow) const;
    void ForceRedraw(void) const;
    void UpdateWindow(void) const;
 
    virtual void OnOpen(void) {}
    virtual void OnClose(void) {}
+
+   virtual std::string GetWindowTitle(void) const { return m_windowTitle; }
+   virtual void        SetWindowTitle(const std::string& windowTitle);
 
    bool IsMessageForMe(const unsigned handle) const { return handle == m_handle; }
    bool IsWindowOpen(void) const;
@@ -53,6 +59,8 @@ private:
 
    int m_windowWidth;
    int m_windowHeight;
+
+   void ForceRedrawTitle(void) const;
 
    Window(const Window&); // Might want to make windows copiable
    Window& operator=(const Window&);

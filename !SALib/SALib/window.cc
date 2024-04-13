@@ -2,14 +2,19 @@
 
 #include <cstring>
 #include <cstdio> // temp
+#include "oslib/os.h"
 #include "oslib/wimp.h"
 #include "salib/utilities.h"
 #include "salib/window.h"
+
+#include "salib/reporter.h"
 
 
 namespace SALib {
 
 namespace Wimp {
+
+const std::size_t maxTitleSize = 80;
 
 Window::Window(const std::string windowTitle, const int width, const int height, const Window* parent)
       : m_windowTitle(windowTitle), m_windowWidth(width), m_windowHeight(height), m_parent(parent)
@@ -62,11 +67,18 @@ Window::Window(const std::string windowTitle, const int width, const int height,
    windowBlock.extent.x1 = 1000;
    windowBlock.extent.y1 = 0;
 
+//   windowBlock.title_flags = wimp_ICON_TEXT
+//                           | wimp_ICON_BORDER
+//                           | wimp_ICON_HCENTRED
+//                           | wimp_ICON_VCENTRED
+//                           | wimp_ICON_FILLED;
+
    windowBlock.title_flags = wimp_ICON_TEXT
                            | wimp_ICON_BORDER
                            | wimp_ICON_HCENTRED
                            | wimp_ICON_VCENTRED
-                           | wimp_ICON_FILLED;
+                           | wimp_ICON_FILLED
+                           | wimp_ICON_INDIRECTED;
 
    windowBlock.work_flags = wimp_BUTTON_NEVER
                          << wimp_ICON_BUTTON_TYPE_SHIFT;
@@ -76,7 +88,12 @@ Window::Window(const std::string windowTitle, const int width, const int height,
    windowBlock.xmin = 0;
    windowBlock.ymin = 0;
 
-   std::strncpy(windowBlock.title_data.text, m_windowTitle.c_str(), 12);
+   //std::strncpy(tempTitle, m_windowTitle.c_str(), sizeof(tempTitle));
+// Use indirected titles now
+   windowBlock.title_data.indirected_text.text = const_cast<char*>(m_windowTitle.c_str());
+   windowBlock.title_data.indirected_text.validation = const_cast<char*>("");
+   windowBlock.title_data.indirected_text.size = maxTitleSize; //static_cast<int>(m_windowTitle.length());
+
    windowBlock.icon_count = 0;
 
    m_handle = reinterpret_cast<unsigned>(wimp_create_window(&windowBlock));
@@ -120,11 +137,18 @@ Window::Window(const WindowBuilder& builder, const Window* parent)
    windowBlock.extent.x1 = builder.GetWindowExtentWidth();
    windowBlock.extent.y1 = 0;
 
+//   windowBlock.title_flags = wimp_ICON_TEXT
+//                           | wimp_ICON_BORDER
+//                           | wimp_ICON_HCENTRED
+//                           | wimp_ICON_VCENTRED
+//                           | wimp_ICON_FILLED;
+
    windowBlock.title_flags = wimp_ICON_TEXT
                            | wimp_ICON_BORDER
                            | wimp_ICON_HCENTRED
                            | wimp_ICON_VCENTRED
-                           | wimp_ICON_FILLED;
+                           | wimp_ICON_FILLED
+                           | wimp_ICON_INDIRECTED;
 
    windowBlock.work_flags = static_cast<wimp_icon_flags>(builder.GetWindowButtonType())
                          << wimp_ICON_BUTTON_TYPE_SHIFT;
@@ -134,7 +158,12 @@ Window::Window(const WindowBuilder& builder, const Window* parent)
    windowBlock.xmin = 0;
    windowBlock.ymin = 0;
 
-   std::strncpy(windowBlock.title_data.text, m_windowTitle.c_str(), 12);
+//   std::strncpy(windowBlock.title_data.text, m_windowTitle.c_str(), 12);
+// Use indirected titles now
+   windowBlock.title_data.indirected_text.text = const_cast<char*>(m_windowTitle.c_str());
+   windowBlock.title_data.indirected_text.validation = const_cast<char*>("");
+   windowBlock.title_data.indirected_text.size = static_cast<int>(m_windowTitle.length());
+
    windowBlock.icon_count = 0;
 
    m_handle = reinterpret_cast<unsigned>(wimp_create_window(&windowBlock));
@@ -263,11 +292,31 @@ void Window::ForceRedraw(void) const
    wimp_force_redraw(windowOutline.w, windowOutline.outline.x0, windowOutline.outline.y0, windowOutline.outline.x1, windowOutline.outline.y1);
 }
 
+void Window::SetExtentWidth(const int width)
+{
+   wimp_window_info windowInfo = { 0 };
+   windowInfo.w = reinterpret_cast<wimp_w>(m_handle);
+   wimp_get_window_info_header_only(&windowInfo);
+
+   os_box osBox = { windowInfo.extent.x0, windowInfo.extent.y0, windowInfo.extent.x1 + width, windowInfo.extent.y1 };
+   wimp_set_extent(reinterpret_cast<wimp_w>(m_handle), &osBox);
+}
+
+void Window::SetExtentHeight(const int height)
+{
+   wimp_window_info windowInfo = { 0 };
+   windowInfo.w = reinterpret_cast<wimp_w>(m_handle);
+   wimp_get_window_info_header_only(&windowInfo);
+
+   os_box osBox = { windowInfo.extent.x0, windowInfo.extent.y0 - height, windowInfo.extent.x1, windowInfo.extent.y1 };
+   wimp_set_extent(reinterpret_cast<wimp_w>(m_handle), &osBox);
+}
+
 void Window::UpdateWindow(void) const
 {
    wimp_window_info windowInfo = { 0 };
    windowInfo.w = reinterpret_cast<wimp_w>(m_handle);
-   wimp_get_window_info(&windowInfo);
+   wimp_get_window_info(&windowInfo);  // Should this be header only? The non-header version corrupts the stack
 
    wimp_draw wimpDraw = { 0 };
    wimpDraw.w = reinterpret_cast<wimp_w>(m_handle);
@@ -288,6 +337,22 @@ void Window::UpdateWindow(void) const
       RedrawRectangle(visibleArea, scrollXOffset, scrollYOffset, currentGraphicsWindow);
       moreToDraw = wimp_get_rectangle(&wimpDraw);
    }
+}
+
+void Window::SetWindowTitle(const std::string& windowTitle)
+{
+   m_windowTitle.clear();
+   for (std::size_t n = 0; n < windowTitle.size(); ++n) {
+      m_windowTitle.push_back(windowTitle[n]);
+   }
+
+   m_windowTitle.push_back('\0');
+   ForceRedrawTitle();
+}
+
+void Window::ForceRedrawTitle(void) const
+{
+   wimp_force_redraw_title(reinterpret_cast<wimp_w>(m_handle));
 }
 
 }
