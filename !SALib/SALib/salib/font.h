@@ -6,6 +6,8 @@
 #include <list>
 #include <string>
 
+#include "colour.h"
+
 namespace SALib {
 
 namespace OS {
@@ -17,6 +19,9 @@ public:
 
    void Load(const int fontSize);
    void Unload(void);
+
+   void Paint(const std::string& text, const int xPos, const int yPos, const Wimp::Colour::Colour foreground, const Wimp::Colour::Colour background) const;
+   void Paint(const std::string& text, const int xPos, const int yPos, const Wimp::Colour::RGBColour foreground, const Wimp::Colour::RGBColour background) const;
 
    bool IsLoaded(void) const { return m_handle != 0xFFu; }
 

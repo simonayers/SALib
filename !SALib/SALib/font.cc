@@ -3,7 +3,9 @@
 #include <list>
 #include <string>
 
+#include "oslib/colourtrans.h"
 #include "oslib/font.h"
+#include "oslib/wimp.h"
 #include "salib/font.h"
 
 namespace SALib {
@@ -31,6 +33,26 @@ void Font::Unload(void)
    m_handle = 0xFF;
 }
 
+void Font::Paint(const std::string& text, const int xPos, const int yPos, const Wimp::Colour::Colour foreground, const Wimp::Colour::Colour background) const
+{
+   if (!IsLoaded()) { return; }
+
+   wimp_set_font_colours(static_cast<wimp_colour>(background), static_cast<wimp_colour>(foreground));
+
+   const font_string_flags flags = font_OS_UNITS | font_GIVEN_FONT;
+   font_paint(static_cast<font_f>(m_handle), text.c_str(), flags, xPos, yPos, NULL, NULL, text.length());
+}
+
+void Font::Paint(const std::string& text, const int xPos, const int yPos, const Wimp::Colour::RGBColour foreground, const Wimp::Colour::RGBColour background) const
+{
+   if (!IsLoaded()) { return; }
+
+   const int maxColourOffset = 14;
+   colourtrans_set_font_colours(static_cast<font_f>(m_handle), static_cast<os_colour>(background.GetBGRAValue()), static_cast<os_colour>(foreground.GetBGRAValue()), maxColourOffset, NULL, NULL, NULL);
+
+   const font_string_flags flags = font_OS_UNITS | font_GIVEN_FONT;
+   font_paint(static_cast<font_f>(m_handle), text.c_str(), flags, xPos, yPos, NULL, NULL, text.length());
+}
 
 /*************************************************************************/
 
