@@ -52,7 +52,8 @@ namespace Wimp {
          bool m_titleIndirected;
       };
 
-      MenuEntry(const MenuFlagsBuilder& menuFlags, const Menu* subMenu, const IconFlagsBuilder& iconFlags, const IconDataBuilder& iconData, const MenuSelectionCommandBase& menuSelectClickedCommand, const MenuSelectionCommandBase& menuAdjustClickedCommand);
+      MenuEntry(const MenuFlagsBuilder& menuFlags, const Menu* subMenu, const IconFlagsBuilder& iconFlags, const IconDataBuilder& iconData,
+                const MenuSelectionCommandBase& menuSelectClickedCommand, const MenuSelectionCommandBase& menuAdjustClickedCommand);
       virtual ~MenuEntry(void);
 
       const MenuFlagsBuilder& GetMenuFlags(void) const { return m_menuFlags; }

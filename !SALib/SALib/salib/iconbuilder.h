@@ -123,9 +123,13 @@ public:
    const std::string& GetSpriteName(void) const { return m_spriteName; }
    void SetSpriteName(const std::string& spriteName) { m_spriteName = spriteName; }
 
+   const std::string& GetValidation(void) const { return m_validation; }
+   void SetValidation(const std::string& validation) { m_validation = validation; }
+
 private:
    std::string m_text;
    std::string m_spriteName;
+   std::string m_validation;
 };
 
 

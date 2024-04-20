@@ -16,6 +16,9 @@ namespace Wimp {
       Icon(const IconBuilder& iconBuilder, const Window& window, const unsigned maxTextSize = 24U);
       virtual ~Icon(void);
 
+      void Hide(void) const;
+      void Unhide(void) const;
+
       void Redraw(void) const;
 
       std::string& GetRawTextString(void) { return m_text; }
@@ -30,6 +33,8 @@ namespace Wimp {
       std::string m_spriteName;
       std::string m_text;
       std::string m_validationString;
+
+      mutable bool m_iconHidden;
    };
 
 

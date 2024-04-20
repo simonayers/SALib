@@ -10,7 +10,7 @@ namespace Wimp {
 
 unsigned IconFlagsBuilder::GetFlags(void) const
 {
-   unsigned flags = m_buttonType << 12;
+   unsigned flags = static_cast<unsigned>(m_buttonType) << wimp_ICON_BUTTON_TYPE_SHIFT;
 
    if (m_iconText)              { flags |= wimp_ICON_TEXT; }
    if (m_iconSprite)            { flags |= wimp_ICON_SPRITE; }
