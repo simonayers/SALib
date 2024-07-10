@@ -1,0 +1,9 @@
+| Rough makefile for building SALib library with G++
+
+WimpSlot -min 20M
+
+Dir <Obey$Dir>
+
+echo Compiling source files...
+
+make all
