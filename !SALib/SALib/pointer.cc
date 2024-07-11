@@ -39,14 +39,14 @@ void SetDefaultSprite(void)
 
 int GetPointerXPosition(void)
 {
-   wimp_pointer pointer = { 0 };
+   wimp_pointer pointer;
    wimp_get_pointer_info(&pointer);
    return pointer.pos.x;
 }
 
 int GetPointerYPosition(void)
 {
-   wimp_pointer pointer = { 0 };
+   wimp_pointer pointer;
    wimp_get_pointer_info(&pointer);
    return pointer.pos.y;
 }

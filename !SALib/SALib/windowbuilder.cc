@@ -39,7 +39,7 @@ unsigned WindowBuilder::WindowFlagsBuilder::GetFlags(void) const
 
 static WindowBuilder::WindowFlagsBuilder DefaultWindowFlags(void)
 {
-
+   return WindowBuilder::WindowFlagsBuilder();
 }
 
 // Default values build a generic window

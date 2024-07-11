@@ -61,7 +61,7 @@ static wimp_icon_data ExtractIconData(const IconDataBuilder& iconDataBuilder)
 {
 // Just going to implement text for now
 
-   wimp_icon_data iconData = { 0 };
+   wimp_icon_data iconData = { .text = {'\0'} };
 
    iconData.indirected_text.text = const_cast<char*>(iconDataBuilder.GetText().c_str());
    iconData.indirected_text.validation = const_cast<char*>("");

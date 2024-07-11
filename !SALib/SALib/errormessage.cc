@@ -315,10 +315,10 @@ const Icon& NonBlockingErrorWindow::Show(void)
    const wimp_poll_flags wimpPollFlags = wimp_MASK_NULL | wimp_MASK_LEAVING | wimp_MASK_ENTERING
                                        | wimp_MASK_LOSE | wimp_MASK_GAIN    | wimp_MASK_POLLWORD;
 
-   wimp_block wimpBlock = { 0 };
+   wimp_block wimpBlock = { .reserved = { 0 } };
    wimp_event_no reason = 0;
 
-   while (!m_task.RequestToQuitReceived()) {  // temporary - needs to be set to true
+   while (true) {
       CheckForErrors(xwimp_poll(wimpPollFlags, &wimpBlock, NULL, &reason));
 
       switch (reason) {
@@ -369,7 +369,6 @@ const Icon& NonBlockingErrorWindow::Show(void)
              break;
       }
    }
-
 }
 
 

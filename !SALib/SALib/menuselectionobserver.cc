@@ -17,7 +17,7 @@ void SALib::Wimp::MenuSelectionObserver::Update(const unsigned* blockPtr) const
       std::size_t element = 0;
       Menu* currentMenu = &m_menu;
                                                      
-      wimp_pointer pointer = { 0 };
+      wimp_pointer pointer;
       wimp_get_pointer_info(&pointer);
 
       if (pointer.buttons == wimp_CLICK_ADJUST) {

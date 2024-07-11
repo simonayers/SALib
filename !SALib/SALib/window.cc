@@ -17,7 +17,7 @@ namespace Wimp {
 const std::size_t maxTitleSize = 80;
 
 Window::Window(const std::string windowTitle, const int width, const int height, const Window* parent)
-      : m_windowTitle(windowTitle), m_windowWidth(width), m_windowHeight(height), m_parent(parent)
+      : m_windowTitle(windowTitle), m_parent(parent), m_windowWidth(width), m_windowHeight(height)
 {
    // Default window implementation
 
@@ -101,8 +101,9 @@ Window::Window(const std::string windowTitle, const int width, const int height,
 
 
 Window::Window(const WindowBuilder& builder, const Window* parent)
-   : m_windowTitle(builder.GetWindowTitle()), m_windowWidth(builder.GetWindowVisibleWidth()),
-     m_windowHeight(builder.GetWindowVisibleHeight()), m_parent(parent)
+   : m_windowTitle(builder.GetWindowTitle()), m_parent(parent),
+     m_windowWidth(builder.GetWindowVisibleWidth()),
+     m_windowHeight(builder.GetWindowVisibleHeight())
 {
    wimp_window windowBlock;
 

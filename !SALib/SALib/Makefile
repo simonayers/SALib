@@ -17,7 +17,7 @@ $(LIBRARY): $(OBJECTS)
 	ar rcs  $@ $^
 
 %.o: %.cc
-	$(CPP) -c $(LINKFLAGS) $(INCDIRS) -o $@ $^
+	$(CPP) -c $(CPPFLAGS) -o $@ $^
 
 clean:
 	IfThere libSALib/a Then X Wipe libSALib/a ~CFR~V
