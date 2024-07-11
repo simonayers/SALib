@@ -91,7 +91,7 @@ Window::Window(const std::string windowTitle, const int width, const int height,
    //std::strncpy(tempTitle, m_windowTitle.c_str(), sizeof(tempTitle));
 // Use indirected titles now
    windowBlock.title_data.indirected_text.text = const_cast<char*>(m_windowTitle.c_str());
-   windowBlock.title_data.indirected_text.validation = const_cast<char*>("");
+   windowBlock.title_data.indirected_text.validation = reinterpret_cast<char*>(-1);
    windowBlock.title_data.indirected_text.size = maxTitleSize; //static_cast<int>(m_windowTitle.length());
 
    windowBlock.icon_count = 0;
@@ -162,7 +162,7 @@ Window::Window(const WindowBuilder& builder, const Window* parent)
 //   std::strncpy(windowBlock.title_data.text, m_windowTitle.c_str(), 12);
 // Use indirected titles now
    windowBlock.title_data.indirected_text.text = const_cast<char*>(m_windowTitle.c_str());
-   windowBlock.title_data.indirected_text.validation = const_cast<char*>("");
+   windowBlock.title_data.indirected_text.validation = reinterpret_cast<char*>(-1);
    windowBlock.title_data.indirected_text.size = static_cast<int>(m_windowTitle.length());
 
    windowBlock.icon_count = 0;
