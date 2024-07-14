@@ -9,6 +9,7 @@
 
 #include "command.h"
 #include "iconbuilder.h"
+#include "window.h"
 
 namespace SALib {
 
@@ -54,10 +55,15 @@ namespace Wimp {
 
       MenuEntry(const MenuFlagsBuilder& menuFlags, const Menu* subMenu, const IconFlagsBuilder& iconFlags, const IconDataBuilder& iconData,
                 const MenuSelectionCommandBase& menuSelectClickedCommand, const MenuSelectionCommandBase& menuAdjustClickedCommand);
+
+      MenuEntry(const MenuFlagsBuilder& menuFlags, const Window& subMenu, const IconFlagsBuilder& iconFlags, const IconDataBuilder& iconData,
+                const MenuSelectionCommandBase& menuSelectClickedCommand, const MenuSelectionCommandBase& menuAdjustClickedCommand);
+
       virtual ~MenuEntry(void);
 
       const MenuFlagsBuilder& GetMenuFlags(void) const { return m_menuFlags; }
       const Menu*             GetSubMenu(  void) const { return m_subMenu; }
+      const Window*           GetWindowSubMenu(void) const { return m_windowSubMenu; }
       const IconFlagsBuilder& GetIconFlags(void) const { return m_iconFlags; }
       const IconDataBuilder&  GetIconData( void) const { return m_iconData; }
 
@@ -67,6 +73,7 @@ namespace Wimp {
    private:
       MenuFlagsBuilder m_menuFlags;
       const Menu* m_subMenu;
+      const Window* m_windowSubMenu;
       IconFlagsBuilder m_iconFlags;
       IconDataBuilder m_iconData;
 

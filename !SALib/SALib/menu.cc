@@ -28,7 +28,26 @@ unsigned MenuEntry::MenuFlagsBuilder::GetFlags(void) const
 
 MenuEntry::MenuEntry(const MenuFlagsBuilder& menuFlags, const Menu* subMenu, const IconFlagsBuilder& iconFlags, const IconDataBuilder& iconData,
                      const MenuSelectionCommandBase& menuSelectClickedCommand, const MenuSelectionCommandBase& menuAdjustClickedCommand)
-   : m_menuFlags(menuFlags), m_subMenu(subMenu), m_iconFlags(iconFlags), m_iconData(iconData), m_menuSelectClickedCommand(&menuSelectClickedCommand), m_menuAdjustClickedCommand(&menuAdjustClickedCommand)
+   :   m_menuFlags(menuFlags),
+       m_subMenu(subMenu),
+       m_windowSubMenu(NULL),
+       m_iconFlags(iconFlags),
+       m_iconData(iconData),
+       m_menuSelectClickedCommand(&menuSelectClickedCommand),
+       m_menuAdjustClickedCommand(&menuAdjustClickedCommand)
+{
+
+}
+
+MenuEntry::MenuEntry(const MenuFlagsBuilder& menuFlags, const Window& subMenu, const IconFlagsBuilder& iconFlags, const IconDataBuilder& iconData,
+                     const MenuSelectionCommandBase& menuSelectClickedCommand, const MenuSelectionCommandBase& menuAdjustClickedCommand)
+   :   m_menuFlags(menuFlags),
+       m_subMenu(NULL),
+       m_windowSubMenu(&subMenu),
+       m_iconFlags(iconFlags),
+       m_iconData(iconData),
+       m_menuSelectClickedCommand(&menuSelectClickedCommand),
+       m_menuAdjustClickedCommand(&menuAdjustClickedCommand)
 {
 
 }
@@ -94,12 +113,17 @@ void Menu::GenerateMenu(const int xPos, const int yPos)
        menuEntry->menu_flags = m_menuEntries[it].GetMenuFlags().GetFlags();
 
        if (m_menuEntries[it].GetSubMenu()) {
-          menuEntry->sub_menu = const_cast<wimp_menu*>(reinterpret_cast<const wimp_menu*>(&m_menuEntries[it].GetSubMenu()->m_dataBuffer[0]));
+          menuEntry->sub_menu = const_cast<wimp_menu*>(reinterpret_cast<const wimp_menu*>(
+                                   &m_menuEntries[it].GetSubMenu()->m_dataBuffer[0]));
+       } else if (m_menuEntries[it].GetWindowSubMenu()) {
+          menuEntry->sub_menu = reinterpret_cast<wimp_menu*>(m_menuEntries[it].GetWindowSubMenu()->GetWindowHandle());
        } else {
           menuEntry->sub_menu = NULL;
        }
 
-       menuEntry->icon_flags = m_menuEntries[it].GetIconFlags().GetFlags() | (wimp_COLOUR_BLACK << wimp_ICON_FG_COLOUR_SHIFT) | (wimp_COLOUR_WHITE << wimp_ICON_BG_COLOUR_SHIFT);
+       menuEntry->icon_flags = m_menuEntries[it].GetIconFlags().GetFlags()
+                             | (wimp_COLOUR_BLACK << wimp_ICON_FG_COLOUR_SHIFT)
+                             | (wimp_COLOUR_WHITE << wimp_ICON_BG_COLOUR_SHIFT);
        menuEntry->data       = ExtractIconData(m_menuEntries[it].GetIconData());
 
        int entryWidth = (m_menuEntries[it].GetIconData().GetText().size() + 1) * 16;
